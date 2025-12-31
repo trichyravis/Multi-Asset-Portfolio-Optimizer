@@ -310,16 +310,9 @@ with col2:
 # Info boxes
 st.markdown("")
 
-col1, col2 = st.columns(2)
-
-with col1:
-    st.info("""
-    💡 **Next Step:** Go to **⚖️ Weights** page to adjust weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
-    """)
-
-with col2:
-    if st.button("▶️ Go to Weights Page", key="go_to_weights", use_container_width=True):
-        st.switch_page("pages/2_Weights.py")
+st.info("""
+💡 **Next Step:** Go to sidebar → ⚖️ **Weights** to adjust your weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
+""")
 
 st.success(f"""
 ✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({st.session_state.risk_free_rate:.2f}%) and investment period ({st.session_state.investment_period} years).
