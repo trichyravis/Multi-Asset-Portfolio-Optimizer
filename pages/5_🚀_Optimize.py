@@ -13,6 +13,7 @@ Prof. V. Ravichandran
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from config_enhanced import PAGE_CONFIG
 from styles_enhanced import apply_main_styles, render_header, render_footer
 
@@ -200,6 +201,99 @@ with col3:
         f"{improvement_sharpe:+.2f}%",
         delta=f"{opt_sharpe - current_sharpe:.3f}"
     )
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EFFICIENT FRONTIER VISUALIZATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>📊 EFFICIENT FRONTIER</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Generate efficient frontier by simulating random portfolios
+np.random.seed(42)
+num_simulations = 5000
+selected_assets_list = list(st.session_state.selected_assets.keys())
+num_assets = len(selected_assets_list)
+
+# Store simulation results
+frontier_returns = []
+frontier_vols = []
+frontier_sharpes = []
+
+for _ in range(num_simulations):
+    # Random weights
+    weights = np.random.random(num_assets)
+    weights /= np.sum(weights)
+    
+    # Calculate portfolio metrics
+    port_return = sum(weights[i] * ASSET_DATA[selected_assets_list[i]]["return"] 
+                      for i in range(num_assets) if selected_assets_list[i] in ASSET_DATA)
+    port_vol = np.sqrt(sum((weights[i] ** 2) * (ASSET_DATA[selected_assets_list[i]]["volatility"] ** 2) 
+                            for i in range(num_assets) if selected_assets_list[i] in ASSET_DATA))
+    port_sharpe = (port_return - st.session_state.risk_free_rate) / port_vol if port_vol > 0 else 0
+    
+    frontier_returns.append(port_return)
+    frontier_vols.append(port_vol)
+    frontier_sharpes.append(port_sharpe)
+
+# Create Efficient Frontier plot
+fig, ax = plt.subplots(figsize=(12, 7))
+
+# Plot all simulated portfolios
+scatter = ax.scatter(frontier_vols, frontier_returns, c=frontier_sharpes, 
+                     cmap='viridis', alpha=0.5, s=30, label='Simulated Portfolios')
+
+# Plot current portfolio
+ax.scatter(current_vol, current_return, color='orange', s=200, marker='o', 
+          edgecolors='black', linewidth=2, label='Current Portfolio', zorder=5)
+
+# Plot optimized portfolio
+ax.scatter(opt_vol, opt_return, color='lime', s=200, marker='*', 
+          edgecolors='black', linewidth=2, label='Optimized Portfolio', zorder=5)
+
+# Plot Capital Allocation Line (CAL)
+max_vol_for_cal = max(frontier_vols) * 1.2
+cal_vols = np.linspace(0, max_vol_for_cal, 100)
+risk_free_rate = st.session_state.risk_free_rate
+
+if opt_sharpe > 0:
+    cal_returns = risk_free_rate + opt_sharpe * cal_vols
+    ax.plot(cal_vols, cal_returns, 'r--', linewidth=2, label='Capital Allocation Line', zorder=4)
+
+# Risk-free rate point
+ax.scatter(0, risk_free_rate, color='red', s=150, marker='D', 
+          edgecolors='black', linewidth=2, label='Risk-Free Rate', zorder=5)
+
+# Formatting
+ax.set_xlabel('Portfolio Volatility (Risk) %', fontsize=12, fontweight='bold')
+ax.set_ylabel('Expected Return %', fontsize=12, fontweight='bold')
+ax.set_title('Efficient Frontier - Portfolio Optimization', fontsize=14, fontweight='bold', color='#003366')
+ax.legend(loc='upper left', fontsize=10)
+ax.grid(True, alpha=0.3)
+ax.set_facecolor('#f8f9fa')
+fig.patch.set_facecolor('white')
+
+# Add colorbar
+cbar = plt.colorbar(scatter, ax=ax)
+cbar.set_label('Sharpe Ratio', fontweight='bold')
+
+st.pyplot(fig)
+
+# Add explanation
+st.markdown("""
+**Efficient Frontier Explanation:**
+
+- **Orange Circle (●)** = Your current portfolio allocation
+- **Green Star (★)** = Your optimized portfolio (based on selected objective)
+- **Red Diamond (◆)** = Risk-free rate (4.5% with zero volatility)
+- **Colored Dots** = Other possible portfolio allocations (simulated)
+- **Red Dashed Line** = Capital Allocation Line (optimal risk-return trade-off)
+
+The optimized portfolio should be on or near the efficient frontier, representing the best risk-adjusted returns for your chosen objective.
+""")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # NEXT STEPS
