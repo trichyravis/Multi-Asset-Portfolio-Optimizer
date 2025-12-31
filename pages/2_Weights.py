@@ -179,13 +179,19 @@ with col3:
 with col4:
     if st.button("📋 Auto-Normalize", help="Automatically adjust to 100%", use_container_width=True):
         if total_weight > 0:
-            # Normalize weights to sum to 100%
+            # Normalize weights to sum to exactly 100%
             for asset in selected_assets_list:
                 normalized_weight = weights[asset] / total_weight
                 st.session_state.asset_weights_adjusted[asset] = normalized_weight
                 # Clear the widget input state to force reload from session state
                 if f"input_{asset}" in st.session_state:
                     del st.session_state[f"input_{asset}"]
+            
+            # Adjust last asset to ensure exactly 1.0 (100%) to handle floating point rounding
+            remaining = 1.0 - sum(list(st.session_state.asset_weights_adjusted.values())[:-1])
+            if len(selected_assets_list) > 0:
+                st.session_state.asset_weights_adjusted[selected_assets_list[-1]] = remaining
+            
             st.rerun()
         else:
             st.error("❌ Cannot normalize - all weights are 0. Please enter values first.")
@@ -236,12 +242,14 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# SAVE & VALIDATE
+# SAVE & VALIDATE (with tolerance for rounding)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("")
 
-if total_pct < 99.9 or total_pct > 100.1:
+# More lenient validation (±0.5% tolerance for rounding)
+# This allows 99.5% to 100.5% which handles rounding errors from auto-normalize
+if abs(total_pct - 100) > 0.5:
     st.warning(f"""
     ⚠️ **Weights must total 100%**
     
@@ -253,15 +261,25 @@ if total_pct < 99.9 or total_pct > 100.1:
     3. Click "Reset to Equal" to start over with equal weights
     """)
 else:
-    # Update session state
+    # Update session state - normalize to exactly 100% to handle rounding
+    # Adjust the largest weight to ensure exactly 100%
+    if total_weight > 0:
+        adjustment = (1.0 - total_weight) / len(selected_assets_list)
+        for asset in selected_assets_list:
+            weights[asset] = weights[asset] + adjustment
+    
     st.session_state.selected_assets = weights
     st.session_state.asset_weights_adjusted = weights
+    
+    # Recalculate with corrected weights
+    total_weight_corrected = sum(weights.values())
+    total_pct_corrected = total_weight_corrected * 100
     
     st.markdown("")
     st.success(f"""
     ✅ **Weights Saved Successfully!**
     
-    Total Allocation: **{total_pct:.2f}%**
+    Total Allocation: **{total_pct_corrected:.2f}%**
     
     Your portfolio weights are ready for analysis!
     """)
