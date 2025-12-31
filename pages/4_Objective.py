@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -186,10 +187,22 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-st.info(f"""
-✅ **Objective Selected:** {objective}
+col1, col2, col3 = st.columns([1, 1, 1])
 
-**Next Step:** Go to sidebar → 🚀 **Optimize** to run the optimization with your chosen objective.
-""")
+with col1:
+    if st.button("← Back to Analysis", key="objective_to_analysis", use_container_width=True):
+        st.switch_page("pages/3_Analysis.py")
+
+with col2:
+    st.markdown("""
+        <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 4/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Objective</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with col3:
+    if st.button("Next: Optimize →", key="objective_to_optimize", use_container_width=True):
+        st.switch_page("pages/5_Optimize.py")
 
 render_footer()
