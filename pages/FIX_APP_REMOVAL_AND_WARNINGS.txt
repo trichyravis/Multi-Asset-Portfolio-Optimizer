@@ -1,0 +1,165 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║  🔧 FIX BOTH ISSUES - 10 minutes                                            ║
+║                                                                              ║
+║     1. Delete app.py to remove it from sidebar                             ║
+║     2. Upload fixed page files (use_container_width → width='stretch')    ║
+║                                                                              ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+
+════════════════════════════════════════════════════════════════════════════════════
+TASK 1: DELETE app.py FROM SIDEBAR (2 minutes)
+════════════════════════════════════════════════════════════════════════════════════
+
+CURRENT SIDEBAR:
+  ❌ app (unwanted - DELETE this)
+  ✅ Home
+  ✅ Weights
+  ✅ Analysis
+  ✅ Objective
+  ✅ Optimize
+  ✅ Results
+
+HOW TO DELETE:
+
+1. Go to GitHub:
+   https://github.com/trichrayvis/Multi-Asset-Portfolio-Optimizer
+
+2. Navigate to ROOT directory (top level)
+
+3. Find: app.py
+
+4. Click on app.py to open it
+
+5. Click the trash icon 🗑️ (top right corner)
+
+6. Click "Delete this file"
+
+7. Add commit message: "Delete app.py - remove from sidebar navigation"
+
+8. Click "Commit changes"
+
+9. Wait 1-2 minutes for redeploy
+
+
+════════════════════════════════════════════════════════════════════════════════════
+TASK 2: UPLOAD FIXED PAGE FILES (8 minutes)
+════════════════════════════════════════════════════════════════════════════════════
+
+CHANGES MADE:
+  ✅ Replaced: use_container_width=True
+  ✅ With: width='stretch'
+  ✅ Fixes: Streamlit deprecation warnings
+  ✅ Affects: All button components across 6 pages
+
+FILES TO UPLOAD (6 files):
+  1. 1_🏠_Home_NEW.py (rename to 1_🏠_Home.py during/after upload)
+  2. 2_⚖️_Weights.py
+  3. 3_📈_Analysis.py
+  4. 4_🎯_Objective.py
+  5. 5_🚀_Optimize.py
+  6. 6_📊_Results.py
+
+
+STEPS FOR EACH FILE:
+
+File 1: 1_🏠_Home_NEW.py
+
+  A. Download from outputs (provided below ⬆️)
+  
+  B. Go to GitHub pages/ folder
+  
+  C. Find: 1_🏠_Home.py
+  
+  D. Click on it, then click trash 🗑️ to delete
+  
+  E. Add message: "Remove old home page"
+  
+  F. Back in pages/ folder, click "Add file" → "Upload files"
+  
+  G. Select downloaded: 1_🏠_Home_NEW.py
+  
+  H. Commit with message: "Update home page - fix use_container_width"
+
+
+File 2-6: (Similar process for each)
+
+  For each remaining file:
+  
+  A. Download from outputs ⬆️
+  
+  B. Go to GitHub pages/ folder
+  
+  C. Click on existing file (e.g., 2_⚖️_Weights.py)
+  
+  D. Click pencil ✏️ (edit mode)
+  
+  E. Select ALL (Ctrl+A) and delete content
+  
+  F. Copy content from downloaded file
+  
+  G. Paste into GitHub editor
+  
+  H. Commit with message: "Fix deprecation warnings - use width parameter"
+
+
+════════════════════════════════════════════════════════════════════════════════════
+✅ EXPECTED RESULT (After both tasks)
+════════════════════════════════════════════════════════════════════════════════════
+
+SIDEBAR (Clean):
+  ✅ Home
+  ✅ Weights
+  ✅ Analysis
+  ✅ Objective
+  ✅ Optimize
+  ✅ Results
+  ❌ NO "app" page
+
+WARNINGS:
+  ✅ Deprecation warnings gone
+  ✅ App runs cleanly
+  ✅ All buttons work properly
+
+
+════════════════════════════════════════════════════════════════════════════════════
+📋 QUICK CHECKLIST
+════════════════════════════════════════════════════════════════════════════════════
+
+TASK 1:
+  ☐ Delete app.py from GitHub root
+  ☐ Commit the deletion
+  ☐ Wait 1-2 minutes
+
+TASK 2:
+  ☐ Download all 6 fixed page files (below ⬆️)
+  ☐ Upload/replace each file in pages/ folder on GitHub
+  ☐ Commit each change
+  ☐ Wait 5-10 minutes for full deployment
+
+VERIFY:
+  ☐ Refresh app (Ctrl+Shift+R)
+  ☐ Sidebar shows only 6 pages (no "app")
+  ☐ No deprecation warnings in logs
+  ☐ All buttons work
+  ☐ Complete workflow works (Steps 1-6)
+
+
+════════════════════════════════════════════════════════════════════════════════════
+⏱️ TIMING
+════════════════════════════════════════════════════════════════════════════════════
+
+Delete app.py:              2 minutes
+Upload 6 page files:        5 minutes
+Deployment wait:            3-5 minutes
+Testing:                    1 minute
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL:                      10-15 minutes
+
+
+════════════════════════════════════════════════════════════════════════════════════
+
+FILES PROVIDED BELOW - DOWNLOAD ALL 6 PAGE FILES! ⬇️
+
+════════════════════════════════════════════════════════════════════════════════════
