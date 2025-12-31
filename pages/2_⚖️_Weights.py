@@ -192,7 +192,7 @@ else:
     
     with col2:
         if st.button("▶️ Go to Analysis Page", key="go_to_analysis", use_container_width=True):
-            st.switch_page("pages/3_📊_Analysis.py")
+            st.switch_page("pages/3_Analysis.py")
     
     # Next steps
     st.markdown("""
