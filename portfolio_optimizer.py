@@ -355,8 +355,59 @@ def main():
             st.error("Please select at least one asset")
             return
         
-        # Step 4: Risk-Free Rate
-        st.markdown("**Step 4: Risk-Free Rate**")
+        # Step 4: Weight Allocation (NEW!)
+        st.markdown("**Step 4: Allocate Portfolio Weights**")
+        st.caption(f"Total Assets: {len(all_tickers)} | Default: Equal Weights ({100/len(all_tickers):.1f}% each)")
+        
+        # Initialize weights in session state if not present
+        if 'portfolio_weights' not in st.session_state:
+            st.session_state.portfolio_weights = {ticker: 100/len(all_tickers) for ticker in all_tickers}
+        
+        # Create two columns: one for sliders, one for display
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            # Weight sliders for each asset
+            weight_dict = {}
+            st.write("**Manual Weight Allocation:**")
+            for ticker in all_tickers:
+                weight = st.slider(
+                    f"Weight - {ticker}:",
+                    min_value=0.0,
+                    max_value=100.0,
+                    value=st.session_state.portfolio_weights.get(ticker, 100/len(all_tickers)),
+                    step=0.1,
+                    key=f"weight_{ticker}",
+                    help=f"Allocation % for {ticker}"
+                )
+                weight_dict[ticker] = weight
+        
+        with col2:
+            st.write("**Summary:**")
+            total_weight = sum(weight_dict.values())
+            st.metric("Total Weight", f"{total_weight:.1f}%")
+            
+            if abs(total_weight - 100.0) > 0.01:
+                st.warning(f"⚠️ Sum: {total_weight:.1f}%\nNeed: 100%")
+            else:
+                st.success(f"✅ Sum: {total_weight:.1f}%")
+        
+        # Reset to equal weights button
+        if st.button("🔄 Reset to Equal Weights"):
+            st.session_state.portfolio_weights = {ticker: 100/len(all_tickers) for ticker in all_tickers}
+            st.rerun()
+        
+        # Validate weights sum to 100%
+        total_weight = sum(weight_dict.values())
+        if abs(total_weight - 100.0) > 0.01:
+            st.error(f"❌ Portfolio weights must sum to 100%. Current sum: {total_weight:.1f}%")
+            st.stop()
+        
+        # Store weights as numpy array in correct order
+        portfolio_weights = np.array([weight_dict[ticker] for ticker in all_tickers]) / 100.0
+        
+        # Step 5: Risk-Free Rate
+        st.markdown("**Step 5: Risk-Free Rate**")
         risk_free_rate = st.slider(
             "Annual Risk-Free Rate (%):",
             min_value=PORTFOLIO_PARAMS['risk_free_rate_min'] * 100,
@@ -366,13 +417,14 @@ def main():
             help="Current India RBI rate: ~6%"
         ) / 100
         
-        # Step 5: Optimization Method
-        st.markdown("**Step 5: Optimization Method**")
+        # Step 6: Optimization Method
+        st.markdown("**Step 6: Optimization Method**")
         opt_method = st.radio(
             "Select optimization target:",
             options=list(OPTIMIZATION_METHODS.keys()),
             format_func=lambda x: f"{OPTIMIZATION_METHODS[x]['emoji']} {OPTIMIZATION_METHODS[x]['label']}"
         )
+        st.info(OPTIMIZATION_METHODS[opt_method]['description'])
         
         # Fetch and Optimize Button
         st.markdown("---")
@@ -386,9 +438,6 @@ def main():
                     daily_returns = calculate_portfolio_returns(price_data)
                     annual_returns = daily_returns.mean() * 252
                     cov_matrix = daily_returns.cov() * 252
-                    
-                    # Store original weights
-                    original_weights = np.array([1 / len(all_tickers)] * len(all_tickers))
                     
                     # Optimize
                     opt_result = optimize_portfolio(
@@ -406,7 +455,7 @@ def main():
                         }
                         st.session_state.optimization_results = opt_result
                         st.session_state.original_weights = {
-                            'weights': original_weights,
+                            'weights': portfolio_weights,  # Store user's manual weights
                             'tickers': all_tickers
                         }
                         st.session_state.risk_free_rate = risk_free_rate
@@ -421,13 +470,24 @@ def main():
         st.info("""
         👋 Welcome to the Multi-Asset Portfolio Optimizer!
         
-        **Getting Started:**
-        1. Select your time period (30-90 days)
-        2. Choose asset classes (Equities, Indices, Commodities, etc.)
-        3. Pick specific assets from each class
-        4. Set risk-free rate
-        5. Choose optimization method
-        6. Click "Fetch Data & Optimize"
+        **Step-by-Step Workflow:**
+        1. 📅 Select time period (30-90 days)
+        2. 📊 Choose asset classes (Equities, Indices, Commodities, etc.)
+        3. 🎯 Pick specific assets from each class
+        4. ⚖️ Allocate portfolio weights (equal weights by default)
+        5. 📍 Set risk-free rate (default: 6%)
+        6. ⚡ Choose optimization method:
+           - Maximize Sharpe Ratio (RECOMMENDED) - Best risk-adjusted returns
+           - Minimize Risk - Conservative approach
+        7. 🚀 Click "Fetch Data & Optimize"
+        
+        **Key Features:**
+        ✅ Manual weight allocation with sliders
+        ✅ Default equal weights for all assets
+        ✅ Real-time weight validation
+        ✅ 2 robust optimization methods
+        ✅ Comprehensive risk metrics
+        ✅ Visual comparisons and analysis
         
         **Supported Assets:**
         - 🇮🇳 Indian Equities: RELIANCE, TCS, HDFC, INFY, WIPRO, LT, MARUTI, SBIN
