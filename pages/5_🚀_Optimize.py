@@ -1,3 +1,4 @@
+
 import streamlit as st
 from config_enhanced import PAGE_CONFIG
 from styles_enhanced import apply_main_styles, render_header, render_footer
@@ -38,7 +39,7 @@ else:
     try:
         with st.spinner("⏳ Running optimization..."):
             initial_metrics = calculate_portfolio_metrics(selected_assets, weights)
-            optimized_weights_dict = optimize_portfolio(selected_assets, objective)
+            optimized_weights_dict = optimize_portfolio(selected_assets, weights, objective)
             optimized_metrics = calculate_portfolio_metrics(selected_assets, optimized_weights_dict)
             
             st.session_state.optimized_weights = optimized_weights_dict
