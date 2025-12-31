@@ -55,6 +55,13 @@ CLASS_DESCRIPTIONS = {
     "Cryptocurrencies": "⚡ Digital assets - High volatility, emerging class"
 }
 
+CLASS_EMOJIS = {
+    "Stocks": "📈",
+    "Bonds": "📊",
+    "Commodities": "🏆",
+    "Cryptocurrencies": "⚡"
+}
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # MAIN CONTENT
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -135,7 +142,7 @@ with col4:
 
 st.session_state.selected_asset_classes = selected_classes
 
-# Show selected classes info
+# Show selected classes info in boxes
 if selected_classes:
     st.markdown("")
     info_cols = st.columns(len(selected_classes))
@@ -153,7 +160,7 @@ else:
     st.stop()
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 3: SELECT SPECIFIC ASSETS (2-6)
+# STEP 3: SELECT SPECIFIC ASSETS BY CLASS (2-6 TOTAL)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
@@ -163,35 +170,52 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# Get all available assets from selected classes
-available_assets = []
+# Display assets by class in boxes with checkboxes
+selected_assets_list = []
+
 for asset_class in selected_classes:
-    available_assets.extend(ASSET_CLASSES[asset_class])
-
-available_assets = sorted(list(set(available_assets)))  # Remove duplicates and sort
-
-st.info(f"📌 Available assets: {', '.join(available_assets)}")
-
-# Multi-select for specific assets
-selected_assets = st.multiselect(
-    "Select 2-6 assets:",
-    options=available_assets,
-    default=[asset for asset in st.session_state.selected_assets.keys() if asset in available_assets],
-    max_selections=6,
-    help="Choose 2-6 assets for your portfolio"
-)
+    st.markdown(f"""
+        <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
+            <h4 style='color: #FFD700; margin: 0;'>{CLASS_EMOJIS[asset_class]} {asset_class}</h4>
+            <p style='color: white; font-size: 0.9rem; margin: 0.5rem 0 0 0;'>{CLASS_DESCRIPTIONS[asset_class]}</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Create columns for asset checkboxes (4 columns per row)
+    assets_in_class = ASSET_CLASSES[asset_class]
+    
+    # Create rows of 4 columns
+    for i in range(0, len(assets_in_class), 4):
+        cols = st.columns(4)
+        for j, col in enumerate(cols):
+            if i + j < len(assets_in_class):
+                asset = assets_in_class[i + j]
+                with col:
+                    # Check if asset was previously selected
+                    is_checked = asset in st.session_state.selected_assets
+                    if st.checkbox(
+                        asset,
+                        value=is_checked,
+                        key=f"asset_{asset}"
+                    ):
+                        if asset not in selected_assets_list:
+                            selected_assets_list.append(asset)
+                    else:
+                        # Remove from list if unchecked
+                        if asset in selected_assets_list:
+                            selected_assets_list.remove(asset)
 
 # Validate selection
-if len(selected_assets) < 2:
-    st.error("⚠️ Please select at least 2 assets!")
+if len(selected_assets_list) < 2:
+    st.error(f"⚠️ Please select at least 2 assets! (Currently selected: {len(selected_assets_list)})")
     st.stop()
-elif len(selected_assets) > 6:
-    st.error("⚠️ Please select at most 6 assets!")
+elif len(selected_assets_list) > 6:
+    st.error(f"⚠️ Please select at most 6 assets! (Currently selected: {len(selected_assets_list)})")
     st.stop()
 
 # Initialize equal weights for selected assets
-equal_weight = 1.0 / len(selected_assets)
-selected_assets_dict = {asset: equal_weight for asset in selected_assets}
+equal_weight = 1.0 / len(selected_assets_list)
+selected_assets_dict = {asset: equal_weight for asset in selected_assets_list}
 st.session_state.selected_assets = selected_assets_dict
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -214,13 +238,13 @@ with col2:
     st.metric("📅 Investment Period", f"{st.session_state.investment_period} years")
 
 with col3:
-    st.metric("🎯 Assets Selected", f"{len(selected_assets)}")
+    st.metric("🎯 Assets Selected", f"{len(selected_assets_list)}")
 
 # Show selected assets and default weights
 st.markdown("")
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
-        <h3 style='color: #FFD700; margin-top: 0;'>📈 SELECTED ASSETS (Default Weights)</h3>
+        <h3 style='color: #FFD700; margin-top: 0;'>📈 SELECTED ASSETS (Default Equal Weights)</h3>
     </div>
     """, unsafe_allow_html=True)
 
@@ -237,7 +261,7 @@ assets_table = f"""
         <tbody>
 """
 
-for asset in selected_assets:
+for asset in selected_assets_list:
     # Find which class this asset belongs to
     asset_class = ""
     for cls, assets in ASSET_CLASSES.items():
@@ -294,7 +318,7 @@ with col2:
     - Go to 📊 **Analysis** → View current metrics
     - Go to 🎯 **Objective** → Choose goal
     - Go to 🚀 **Optimize** → Run optimization
-    - Go to 📊 **Results** → View optimized portfolio
+    - Go to 📊 **Results** → View results
     """)
 
 # Info boxes
@@ -303,8 +327,8 @@ st.info("""
 💡 **Next Step:** Go to **⚖️ Weights** page to adjust weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
 """)
 
-st.success("""
-✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({:.2f}%) and investment period ({} years).
-""".format(st.session_state.risk_free_rate, st.session_state.investment_period))
+st.success(f"""
+✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({st.session_state.risk_free_rate:.2f}%) and investment period ({st.session_state.investment_period} years).
+""")
 
 render_footer()
