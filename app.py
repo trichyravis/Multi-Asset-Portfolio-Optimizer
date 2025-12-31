@@ -43,7 +43,22 @@ if "selected_assets" not in st.session_state:
 
 # Define asset classes and their assets
 ASSET_CLASSES = {
-    "Stocks": ["AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "JPM", "BAC", "XOM", "PG", "KO"],
+    "Stocks": [
+        # Tech Giants
+        "AAPL", "MSFT", "GOOGL", "AMZN", "NVDA", "META", "INTC", "AMD",
+        # Financial Services
+        "JPM", "BAC", "WFC", "GS", "V", "MA", "PYPL",
+        # Healthcare & Pharma
+        "JNJ", "UNH", "PFE", "LLY", "ABBV",
+        # Consumer & Retail
+        "PG", "KO", "PEP", "HD", "MCD", "COST", "WMT",
+        # Energy & Utilities
+        "XOM", "CVX", "SO",
+        # Media & Entertainment
+        "NFLX", "DIS",
+        # Transportation & Others
+        "TSLA", "BA"
+    ],
     "Bonds": ["BND", "AGG", "LQD", "TLT", "SHV"],
     "Commodities": ["GLD", "SLV", "USO", "DBC", "UUP"],
     "Cryptocurrencies": ["BTC", "ETH", "BNB", "ADA", "SOL"]
@@ -134,15 +149,8 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# MAIN CONTENT
+# MAIN CONTENT - STEPS START HERE
 # ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='text-align: center; margin-bottom: 2rem;'>
-        <h1 style='color: #003366; font-size: 2.5rem; border: none;'>🏔️ Portfolio Optimizer</h1>
-        <p style='color: #003366; font-size: 1.1rem;'>Advanced Multi-Asset Portfolio Optimization</p>
-    </div>
-    """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # STEP 1: MODEL ASSUMPTIONS
