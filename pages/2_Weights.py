@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -180,11 +181,31 @@ else:
     Your portfolio allocation is ready for analysis.
     """)
     
-    # Navigation info
+    # Navigation buttons with breadcrumb
     st.markdown("")
-    st.info("""
-    📊 **Next Step:** Go to sidebar → 📊 **Analysis** to view your current portfolio metrics.
-    """)
+    st.markdown("""
+        <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+            <h2 style='color: #FFD700; margin-top: 0;'>🔄 NAVIGATION</h2>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 1])
+    
+    with nav_col1:
+        if st.button("← Back to Setup", key="weights_to_app", use_container_width=True):
+            st.switch_page("app.py")
+    
+    with nav_col2:
+        st.markdown("""
+            <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+                <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 2/6</p>
+                <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Weights</p>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    with nav_col3:
+        if st.button("Next: Analysis →", key="weights_to_analysis", use_container_width=True):
+            st.switch_page("pages/3_Analysis.py")
     
     # Next steps
     st.markdown("""
