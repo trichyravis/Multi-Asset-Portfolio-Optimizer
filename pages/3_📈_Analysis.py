@@ -305,17 +305,20 @@ with col3:
     - See optimized portfolio
     """)
 
-# Navigation button
+# Navigation info
 st.markdown("")
 col1, col2 = st.columns(2)
 
 with col1:
     st.info("""
-    📋 **Next Step:** Go to **🎯 Objective** page to choose your optimization goal.
+    🎯 **Next Step:** Go to sidebar → 🎯 **Objective** to choose your optimization goal.
     """)
 
 with col2:
-    if st.button("▶️ Go to Objective Page", key="go_to_objective", use_container_width=True):
-        st.switch_page("pages/4_Objective.py")
+    st.markdown("""
+    **Continue:**
+    - 🚀 **Optimize** → Run optimization
+    - 📊 **Results** → View optimized portfolio
+    """)
 
 render_footer()
