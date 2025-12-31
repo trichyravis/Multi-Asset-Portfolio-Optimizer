@@ -38,7 +38,7 @@ if "investment_period" not in st.session_state:
 if "asset_class" not in st.session_state:
     st.session_state.asset_class = "Stocks"
 if "selected_assets" not in st.session_state:
-    st.session_state.selected_assets = []
+    st.session_state.selected_assets = {}  # Changed from list to dict
 if "asset_weights" not in st.session_state:
     st.session_state.asset_weights = {}
 
