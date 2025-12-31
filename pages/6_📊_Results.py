@@ -106,19 +106,53 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-col1, col2, col3, col4 = st.columns(4)
+# Create two columns: Current vs Optimized
+col_current, col_arrow, col_optimized = st.columns([2, 0.5, 2])
 
-with col1:
-    st.metric("Current Return", f"{current_return:.2f}%", f"{opt_return - current_return:+.2f}%")
+# CURRENT PORTFOLIO
+with col_current:
+    st.markdown("""
+        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
+            <h3 style='color: #FFD700; margin-top: 0;'>📈 CURRENT PORTFOLIO</h3>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.metric("Expected Return", f"{current_return:.2f}%")
+    st.metric("Volatility (Risk)", f"{current_vol:.2f}%")
+    st.metric("Sharpe Ratio", f"{current_sharpe:.3f}")
 
-with col2:
-    st.metric("Current Volatility", f"{current_vol:.2f}%", f"{opt_vol - current_vol:+.2f}%")
+# ARROW
+with col_arrow:
+    st.markdown("")
+    st.markdown("")
+    st.markdown("")
+    st.markdown("")
+    st.markdown("""
+        <div style='text-align: center; margin-top: 2rem;'>
+            <h1 style='color: #FFD700; font-size: 2rem;'>→</h1>
+        </div>
+        """, unsafe_allow_html=True)
 
-with col3:
-    st.metric("Current Sharpe", f"{current_sharpe:.3f}", f"{opt_sharpe - current_sharpe:+.3f}")
+# OPTIMIZED PORTFOLIO
+with col_optimized:
+    st.markdown("""
+        <div style='background-color: #1a7d4d; padding: 1.5rem; border-radius: 0.5rem;'>
+            <h3 style='color: #FFD700; margin-top: 0;'>🚀 OPTIMIZED PORTFOLIO</h3>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.metric("Expected Return", f"{opt_return:.2f}%", f"{opt_return - current_return:+.2f}%")
+    st.metric("Volatility (Risk)", f"{opt_vol:.2f}%", f"{opt_vol - current_vol:+.2f}%")
+    st.metric("Sharpe Ratio", f"{opt_sharpe:.3f}", f"{opt_sharpe - current_sharpe:+.3f}")
 
-with col4:
-    st.metric("Optimization Goal", st.session_state.optimization_objective.split("(")[0].strip())
+# Optimization Objective
+st.markdown("")
+st.markdown(f"""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
+        <h3 style='color: #FFD700; margin-top: 0;'>🎯 Optimization Objective</h3>
+        <p style='color: white; font-size: 1.1rem;'><strong>{st.session_state.optimization_objective}</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # OPTIMIZED WEIGHTS TABLE
@@ -157,36 +191,55 @@ st.dataframe(
 )
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# PERFORMANCE METRICS
+# PERFORMANCE METRICS - DETAILED TABLE
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📈 DETAILED METRICS</h2>
+        <h2 style='color: #FFD700; margin-top: 0;'>📈 DETAILED PERFORMANCE METRICS</h2>
     </div>
     """, unsafe_allow_html=True)
 
+# Calculate improvements
+improvement_return_pct = ((opt_return - current_return) / current_return * 100) if current_return != 0 else 0
+improvement_sharpe_pct = ((opt_sharpe - current_sharpe) / current_sharpe * 100) if current_sharpe != 0 else 0
+improvement_vol_pct = ((opt_vol - current_vol) / current_vol * 100) if current_vol != 0 else 0
+
 metrics_data = {
-    "Metric": [
+    "Performance Metric": [
         "Expected Annual Return",
         "Portfolio Volatility",
         "Sharpe Ratio",
         "Risk-Free Rate",
-        "Excess Return"
+        "Excess Return (Rf adjusted)"
     ],
     "Current": [
         f"{current_return:.2f}%",
         f"{current_vol:.2f}%",
-        f"{current_sharpe:.3f}",
+        f"{current_sharpe:.4f}",
         f"{st.session_state.risk_free_rate:.2f}%",
         f"{current_return - st.session_state.risk_free_rate:.2f}%"
     ],
     "Optimized": [
         f"{opt_return:.2f}%",
         f"{opt_vol:.2f}%",
-        f"{opt_sharpe:.3f}",
+        f"{opt_sharpe:.4f}",
         f"{st.session_state.risk_free_rate:.2f}%",
         f"{opt_return - st.session_state.risk_free_rate:.2f}%"
+    ],
+    "Change": [
+        f"{opt_return - current_return:+.2f}%",
+        f"{opt_vol - current_vol:+.2f}%",
+        f"{opt_sharpe - current_sharpe:+.4f}",
+        "0.00%",
+        f"{(opt_return - st.session_state.risk_free_rate) - (current_return - st.session_state.risk_free_rate):+.2f}%"
+    ],
+    "% Improvement": [
+        f"{improvement_return_pct:+.2f}%",
+        f"{improvement_vol_pct:+.2f}%",
+        f"{improvement_sharpe_pct:+.2f}%",
+        "-",
+        f"{improvement_return_pct:+.2f}%"
     ]
 }
 
@@ -196,11 +249,77 @@ st.dataframe(
     use_container_width=True,
     hide_index=True,
     column_config={
-        "Metric": st.column_config.TextColumn("Metric", width="medium"),
-        "Current": st.column_config.TextColumn("Current", width="medium"),
-        "Optimized": st.column_config.TextColumn("Optimized", width="medium")
+        "Performance Metric": st.column_config.TextColumn("Metric", width="medium"),
+        "Current": st.column_config.TextColumn("Current", width="small"),
+        "Optimized": st.column_config.TextColumn("Optimized", width="small"),
+        "Change": st.column_config.TextColumn("Change", width="small"),
+        "% Improvement": st.column_config.TextColumn("% Change", width="small")
     }
 )
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# IMPROVEMENT SUMMARY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>✨ OPTIMIZATION SUMMARY</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Improvement metrics
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    return_improvement = opt_return - current_return
+    if return_improvement > 0:
+        color = "🟢"
+        direction = "INCREASED"
+    else:
+        color = "🔴"
+        direction = "DECREASED"
+    
+    st.markdown(f"""
+        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+            <p style='color: white; margin: 0;'>{color} Return {direction}</p>
+            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_return_pct:+.2f}%</h2>
+            <p style='color: #90EE90; margin: 0;'>{return_improvement:+.2f}% absolute</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with col2:
+    vol_improvement = opt_vol - current_vol
+    if vol_improvement < 0:
+        color = "🟢"
+        direction = "REDUCED"
+    else:
+        color = "🔴"
+        direction = "INCREASED"
+    
+    st.markdown(f"""
+        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+            <p style='color: white; margin: 0;'>{color} Risk {direction}</p>
+            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_vol_pct:+.2f}%</h2>
+            <p style='color: #90EE90; margin: 0;'>{vol_improvement:+.2f}% absolute</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with col3:
+    sharpe_improvement = opt_sharpe - current_sharpe
+    if sharpe_improvement > 0:
+        color = "🟢"
+        direction = "IMPROVED"
+    else:
+        color = "🔴"
+        direction = "DECLINED"
+    
+    st.markdown(f"""
+        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+            <p style='color: white; margin: 0;'>{color} Sharpe Ratio {direction}</p>
+            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_sharpe_pct:+.2f}%</h2>
+            <p style='color: #90EE90; margin: 0;'>{sharpe_improvement:+.4f} absolute</p>
+        </div>
+        """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # RECOMMENDATIONS
@@ -254,5 +373,44 @@ st.success("""
 Thank you for using The Mountain Path Portfolio Optimizer. 
 Your optimized portfolio is ready for implementation.
 """)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ACTION BUTTONS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🔄 NEXT ACTIONS</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("""
+    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+        <h3 style='color: #FFD700; margin-top: 0;'>⚙️ Change Weights</h3>
+        <p style='color: white;'>Adjust asset weights again</p>
+        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>Weights</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+        <h3 style='color: #FFD700; margin-top: 0;'>🎯 Change Objective</h3>
+        <p style='color: white;'>Try different optimization goal</p>
+        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>Objective</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
+        <h3 style='color: #FFD700; margin-top: 0;'>🏠 Start Over</h3>
+        <p style='color: white;'>Reset and select new assets</p>
+        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>app</strong></p>
+    </div>
+    """, unsafe_allow_html=True)
 
 render_footer()
