@@ -268,9 +268,21 @@ st.markdown(f"""
 
 st.markdown("")
 
+# Initialize flag for showing success message
+show_success = False
+
+# Check: If weights are already validated and match session state, skip validation warning
+if st.session_state.weights_validated and abs(current_input_total - validated_total) < 0.1:
+    # Weights are validated! Use session state values and show success
+    weights = st.session_state.asset_weights_adjusted.copy()
+    total_weight = sum(weights.values())
+    total_pct = total_weight * 100
+    show_success = True
+
 # More lenient validation (±0.5% tolerance for rounding)
 # This allows 99.5% to 100.5% which handles rounding errors from auto-normalize
-if abs(total_pct - 100) > 0.5:
+elif abs(total_pct - 100) > 0.5:
+    show_success = False
     st.warning(f"""
     ⚠️ **Weights must total 100%**
     
@@ -294,14 +306,17 @@ else:
     st.session_state.weights_validated = True  # Mark as validated
     
     # Recalculate with corrected weights
-    total_weight_corrected = sum(weights.values())
-    total_pct_corrected = total_weight_corrected * 100
-    
+    total_weight = sum(weights.values())
+    total_pct = total_weight * 100
+    show_success = True
+
+# Show success message if weights are valid
+if show_success:
     st.markdown("")
     st.success(f"""
     ✅ **Weights Saved Successfully!**
     
-    Total Allocation: **{total_pct_corrected:.2f}%**
+    Total Allocation: **{total_pct:.2f}%**
     
     Your portfolio weights are ready for analysis!
     """)
