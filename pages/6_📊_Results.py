@@ -119,37 +119,36 @@ else:
             </div>
             """, unsafe_allow_html=True)
         
-        # Build weight details table HTML with bulletproof CSS
-        weight_html = '<div style="background-color: #003366 !important; padding: 1rem !important; border-radius: 0.5rem !important;">'
+        # Weight Details Header
+        st.markdown("""
+            <div style='background-color: #003366 !important; padding: 1.5rem !important; border-radius: 0.5rem !important; margin-bottom: 2rem !important;'>
+                <h4 style='color: #FFD700 !important; margin: 0 !important;'>📋 Weight Details:</h4>
+            </div>
+            """, unsafe_allow_html=True)
         
+        # Render each weight box individually
         for asset in selected_assets:
             initial = initial_weights.get(asset, 0)
             optimized = optimized_weights.get(asset, 0)
             change = optimized - initial
             emoji = ASSET_STATS[asset].get('emoji', '📊')
             
-            weight_html += f"""
-            <div style='background-color: #004d80 !important; border-left: 5px solid #FFD700 !important; padding: 1rem !important; margin-bottom: 0.8rem !important; border-radius: 0.3rem !important;'>
-                <div style='width: 100% !important; display: flex !important; justify-content: space-between !important; align-items: center !important;'>
-                    <div style='color: white !important; font-weight: bold !important; font-size: 1.05rem !important;'>
-                        {emoji} {asset}
-                    </div>
-                    <div style='color: white !important; text-align: right !important; font-size: 0.95rem !important;'>
-                        <span style='color: white !important;'>Before: </span>
-                        <span style='color: #FFD700 !important; font-weight: bold !important;'>{initial:.2f}%</span> 
-                        <span style='color: white !important; margin: 0 0.5rem !important;'>|</span>
-                        <span style='color: white !important;'>After: </span>
-                        <span style='color: #90EE90 !important; font-weight: bold !important;'>{optimized:.2f}%</span>
-                        <span style='color: white !important; margin: 0 0.5rem !important;'>|</span>
-                        <span style='color: white !important;'>Change: </span>
-                        <span style='color: #FFB6C1 !important; font-weight: bold !important;'>{change:+.2f}%</span>
-                    </div>
-                </div>
+            box_html = f"""
+            <div style='background-color: #004d80 !important; border-left: 5px solid #FFD700 !important; padding: 1rem !important; margin-bottom: 0.8rem !important; border-radius: 0.3rem !important; display: flex !important; justify-content: space-between !important; align-items: center !important;'>
+                <span style='color: white !important; font-weight: bold !important; font-size: 1.05rem !important;'>{emoji} {asset}</span>
+                <span style='color: white !important; text-align: right !important; font-size: 0.95rem !important;'>
+                    <span style='color: white !important;'>Before: </span>
+                    <span style='color: #FFD700 !important; font-weight: bold !important;'>{initial:.2f}%</span>
+                    <span style='color: white !important; margin: 0 0.5rem !important;'>|</span>
+                    <span style='color: white !important;'>After: </span>
+                    <span style='color: #90EE90 !important; font-weight: bold !important;'>{optimized:.2f}%</span>
+                    <span style='color: white !important; margin: 0 0.5rem !important;'>|</span>
+                    <span style='color: white !important;'>Change: </span>
+                    <span style='color: #FFB6C1 !important; font-weight: bold !important;'>{change:+.2f}%</span>
+                </span>
             </div>
             """
-        
-        weight_html += '</div>'
-        st.markdown(weight_html, unsafe_allow_html=True)
+            st.markdown(box_html, unsafe_allow_html=True)
         
         st.markdown("")
         
