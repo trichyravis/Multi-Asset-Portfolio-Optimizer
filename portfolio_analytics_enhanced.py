@@ -16,17 +16,32 @@ from config_enhanced import ASSET_STATS, RISK_FREE_RATE
 # PORTFOLIO METRICS CALCULATION
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def calculate_portfolio_metrics(assets, weights):
+def calculate_portfolio_metrics(assets, weights, risk_free_rate=None):
     """
     Calculate portfolio metrics based on selected assets and weights
     
     Args:
         assets: List of asset tickers
         weights: Dictionary with ticker: weight mappings
+        risk_free_rate: Risk-free rate as percentage (e.g., 4.5). If None, uses session state or default.
         
     Returns:
         Dictionary with portfolio metrics
     """
+    import streamlit as st
+    
+    # Determine risk-free rate to use
+    if risk_free_rate is None:
+        try:
+            if "risk_free_rate" in st.session_state:
+                rf_rate = st.session_state.risk_free_rate / 100  # Convert from % to decimal
+            else:
+                rf_rate = RISK_FREE_RATE
+        except:
+            rf_rate = RISK_FREE_RATE
+    else:
+        rf_rate = risk_free_rate / 100 if risk_free_rate > 1 else risk_free_rate
+    
     total_weight = sum(weights.values())
     
     # Normalize weights to 100%
@@ -50,11 +65,11 @@ def calculate_portfolio_metrics(assets, weights):
     portfolio_volatility = np.sqrt(portfolio_variance)
     
     # Sharpe Ratio = (Return - Risk-Free Rate) / Volatility
-    sharpe_ratio = (portfolio_return - RISK_FREE_RATE) / portfolio_volatility if portfolio_volatility > 0 else 0
+    sharpe_ratio = (portfolio_return - rf_rate) / portfolio_volatility if portfolio_volatility > 0 else 0
     
     # Sortino Ratio (simplified - using downside volatility as 70% of total volatility)
     downside_volatility = portfolio_volatility * 0.70
-    sortino_ratio = (portfolio_return - RISK_FREE_RATE) / downside_volatility if downside_volatility > 0 else 0
+    sortino_ratio = (portfolio_return - rf_rate) / downside_volatility if downside_volatility > 0 else 0
     
     # Max Drawdown (simplified estimate)
     max_drawdown = -portfolio_volatility * 1.5
@@ -66,7 +81,7 @@ def calculate_portfolio_metrics(assets, weights):
         "sortino_ratio": sortino_ratio,
         "max_drawdown": max_drawdown,
         "weights": normalized_weights,
-        "risk_free_rate": RISK_FREE_RATE,
+        "risk_free_rate": rf_rate,
     }
 
 # ═══════════════════════════════════════════════════════════════════════════════
