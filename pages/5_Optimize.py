@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -298,14 +299,32 @@ The optimized portfolio should be on or near the efficient frontier, representin
 # NEXT STEPS
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# NEXT STEPS
+# ═══════════════════════════════════════════════════════════════════════════════
+
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
         <h2 style='color: #FFD700; margin-top: 0;'>🎯 NEXT STEPS</h2>
     </div>
     """, unsafe_allow_html=True)
 
-st.info("""
-📊 **View Results:** Go to sidebar → 📊 **Results** to see detailed optimized portfolio breakdown and comparison with current allocation.
-""")
+col1, col2, col3 = st.columns([1, 1, 1])
+
+with col1:
+    if st.button("← Back to Objective", key="optimize_to_objective", use_container_width=True):
+        st.switch_page("pages/4_Objective.py")
+
+with col2:
+    st.markdown("""
+        <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 5/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Optimize</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with col3:
+    if st.button("Next: Results →", key="optimize_to_results", use_container_width=True):
+        st.switch_page("pages/6_Results.py")
 
 render_footer()
