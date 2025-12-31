@@ -319,7 +319,7 @@ with col1:
 
 with col2:
     if st.button("▶️ Go to Weights Page", key="go_to_weights", use_container_width=True):
-        st.switch_page("pages/2_⚖️_Weights.py")
+        st.switch_page("pages/2_Weights.py")
 
 st.success(f"""
 ✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({st.session_state.risk_free_rate:.2f}%) and investment period ({st.session_state.investment_period} years).
