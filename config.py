@@ -1,15 +1,191 @@
 
 """
-Configuration Module for Multi-Asset Portfolio Optimization App
-Defines asset classes, colors, parameters, and styling constants
+═══════════════════════════════════════════════════════════════════════════════
+🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
+PROFESSIONAL DESIGN + PORTFOLIO OPTIMIZER CONFIGURATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Centralized configuration for entire application.
+Colors, typography, optimization settings, and portfolio configuration.
 """
 
-# ============================================================================
-# ASSET CLASSES & DEFINITIONS
-# ============================================================================
+# ═══════════════════════════════════════════════════════════════════════════════
+# PROFESSIONAL COLOR SCHEME
+# ═══════════════════════════════════════════════════════════════════════════════
+
+COLORS = {
+    # Primary Color Scheme - MOUNTAIN PATH BRANDING
+    "primary_dark": "#003366",          # Dark blue (sidebar, background)
+    "primary_light": "#004d80",         # Light blue (gradient)
+    "primary_lightest": "#E0F0FF",      # Very light blue
+    
+    # Secondary Colors
+    "accent_gold": "#FFD700",           # Gold (highlights, borders)
+    "accent_light": "#FFF9E6",          # Light gold (hover)
+    
+    # Text Colors - FIXED CONTRAST
+    "text_white": "#FFFFFF",            # WHITE on dark background
+    "text_dark": "#003366",             # Dark text on light backgrounds
+    "text_light": "#FFFFFF",            # Light text on dark
+    
+    # Backgrounds
+    "background_light": "#F5F5F5",      # Light background
+    "background_dark": "#003366",       # Dark background
+    "border_light": "#E0E0E0",          # Light borders
+    
+    # Status Colors
+    "success": "#2ecc71",               # Green
+    "warning": "#f39c12",               # Orange
+    "danger": "#e74c3c",                # Red
+    "info": "#3498db",                  # Blue
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TYPOGRAPHY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+TYPOGRAPHY = {
+    "font_primary": "Times New Roman",
+    "font_secondary": "Arial",
+    
+    # Font sizes
+    "h1_size": "40px",
+    "h2_size": "32px",
+    "h3_size": "24px",
+    "body_size": "16px",
+    "small_size": "12px",
+    
+    # Font weights
+    "light": "300",
+    "normal": "400",
+    "semibold": "600",
+    "bold": "700",
+    "extra_bold": "900",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+PAGE_CONFIG = {
+    "page_title": "🏔️ Multi-Asset Portfolio Optimizer",
+    "page_icon": "🏔️",
+    "layout": "wide",
+    "initial_sidebar_state": "expanded",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HERO HEADER CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+HERO_HEADER = {
+    "background_gradient": f"linear-gradient(135deg, {COLORS['primary_dark']} 0%, {COLORS['primary_light']} 50%, {COLORS['primary_dark']} 100%)",
+    "padding": "3rem 2rem",
+    "border_radius": "20px",
+    "border_color": COLORS["accent_gold"],
+    "border_width": "3px",
+    "box_shadow": "0 12px 30px rgba(0, 51, 102, 0.4)",
+    
+    # Text styling
+    "title_color": COLORS["text_white"],
+    "title_font_size": "36px",
+    "title_font_weight": "900",
+    "title_letter_spacing": "2px",
+    
+    "subtitle_color": COLORS["accent_gold"],
+    "subtitle_font_size": "22px",
+    "subtitle_font_weight": "600",
+    
+    "description_color": "#D0E8FF",
+    "description_font_size": "15px",
+    
+    "emoji_size": "80px",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SIDEBAR CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+SIDEBAR_CONFIG = {
+    "background_gradient": f"linear-gradient(135deg, {COLORS['primary_dark']} 0%, {COLORS['primary_light']} 50%, {COLORS['primary_dark']} 100%)",
+    "text_color": COLORS["text_white"],
+    "header_text_color": COLORS["accent_gold"],
+    "divider_color": "rgba(255, 255, 255, 0.3)",
+    "padding": "1rem",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# METRIC CARD CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+METRIC_CARD = {
+    "background_gradient": f"linear-gradient(135deg, #003d70 0%, #005a9d 100%)",
+    "text_color": COLORS["text_white"],
+    "padding": "1.5rem",
+    "border_radius": "15px",
+    "box_shadow": "0 4px 15px rgba(0, 51, 102, 0.2)",
+    "border_color": COLORS["accent_gold"],
+    "border_width": "2px",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# FOOTER CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+FOOTER_CONFIG = {
+    "text_color": "#666",
+    "background_color": "transparent",
+    "padding": "2rem",
+    "text_align": "center",
+    "border_top": "1px solid #E0E0E0",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PORTFOLIO OPTIMIZER PARAMETERS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+PORTFOLIO_PARAMS = {
+    # Time period
+    "lookback_min": 30,
+    "lookback_max": 90,
+    "lookback_default": 60,
+    
+    # Risk-free rate
+    "risk_free_rate_min": 0.0,
+    "risk_free_rate_max": 0.10,
+    "risk_free_rate_default": 0.06,
+    
+    # Optimization
+    "default_method": "max_sharpe",
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# OPTIMIZATION METHODS (SIMPLIFIED TO 2)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+OPTIMIZATION_METHODS = {
+    "max_sharpe": {
+        "emoji": "⚡",
+        "label": "Maximize Sharpe Ratio (RECOMMENDED)",
+        "description": "Best risk-adjusted returns. Maximizes return per unit of risk.",
+        "formula": "max((Return - Risk-Free) / Risk)",
+        "color": COLORS["accent_gold"],
+    },
+    "min_risk": {
+        "emoji": "🛡️",
+        "label": "Minimize Risk",
+        "description": "Conservative strategy. Minimum volatility for target return.",
+        "formula": "min(Risk) subject to Target Return",
+        "color": "#87CEEB",
+    },
+}
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ASSET CLASSES & TICKERS
+# ═══════════════════════════════════════════════════════════════════════════════
 
 ASSET_CLASSES = {
-    "🇮🇳 Indian Equities": {
+    "Asset Class 1: Indian Equities": {
         "RELIANCE.NS": "Reliance Industries",
         "TCS.NS": "Tata Consultancy Services",
         "HDFC.NS": "HDFC Bank",
@@ -19,246 +195,69 @@ ASSET_CLASSES = {
         "MARUTI.NS": "Maruti Suzuki",
         "SBIN.NS": "State Bank of India",
     },
-    "📈 Indian Indices": {
-        "^NSEI": "Nifty 50 Index",
-        "^NSEBANK": "Nifty Bank Index",
-        "^CNXIT": "Nifty IT Index",
+    "Asset Class 2: Indian Indices": {
+        "^NSEI": "Nifty 50",
+        "^NSEBANK": "Nifty Bank",
+        "^NSMEIT": "Nifty IT",
     },
-    "🇺🇸 US Indices Futures": {
-        "ES=F": "E-mini S&P 500",
-        "NQ=F": "E-mini Nasdaq-100",
-        "YM=F": "E-mini Dow Jones",
+    "Asset Class 3: US Futures": {
+        "^GSPC": "S&P 500",
+        "^CCMP": "Nasdaq-100",
+        "^DJI": "Dow Jones",
     },
-    "🏆 Commodities Futures": {
-        "GC=F": "Gold Futures",
-        "CL=F": "Crude Oil Futures",
-        "SI=F": "Silver Futures",
-        "NG=F": "Natural Gas Futures",
+    "Asset Class 4: Commodities": {
+        "GC=F": "Gold",
+        "CL=F": "Crude Oil",
+        "SI=F": "Silver",
+        "NG=F": "Natural Gas",
     },
-    "💱 Currency Futures": {
-        "USDINR=X": "USD/INR Exchange Rate",
-        "EURINR=X": "EUR/INR Exchange Rate",
-        "GBPINR=X": "GBP/INR Exchange Rate",
+    "Asset Class 5: Currencies": {
+        "USDINR=X": "USD/INR",
+        "EURINR=X": "EUR/INR",
+        "GBPINR=X": "GBP/INR",
     },
-    "₿ Cryptocurrencies": {
+    "Asset Class 6: Crypto": {
         "BTC-USD": "Bitcoin",
         "ETH-USD": "Ethereum",
         "BNB-USD": "Binance Coin",
-    }
-}
-
-# ============================================================================
-# COLOR SCHEME - MOUNTAIN PATH BRANDING
-# ============================================================================
-
-COLORS = {
-    "dark_blue": "#003366",      # RGB(0, 51, 102)
-    "light_blue": "#004d80",     # Lighter blue for accents
-    "gold": "#FFD700",           # Gold accent color
-    "light_gray": "#f0f2f6",     # Light background
-    "text_dark": "#ffffff",      # White text on dark
-    "text_light": "#000000",     # Dark text on light
-    "success": "#00cc66",        # Green for positive
-    "warning": "#ff6b35",        # Orange for warnings
-    "error": "#cc0000",          # Red for errors
-    "border": "#ffffff",         # White borders
-}
-
-# ============================================================================
-# TYPOGRAPHY & FONTS
-# ============================================================================
-
-FONTS = {
-    "family": "sans-serif",
-    "title": 28,
-    "header": 22,
-    "subheader": 18,
-    "body": 14,
-    "small": 12,
-    "monospace": "courier new",
-}
-
-# ============================================================================
-# OPTIMIZATION METHODS
-# ============================================================================
-
-OPTIMIZATION_METHODS = {
-    "max_sharpe": {
-        "emoji": "⚡",
-        "label": "Maximize Sharpe Ratio (RECOMMENDED)",
-        "description": "Balanced strategy - best risk-adjusted returns. Maximizes return per unit of risk.",
-        "formula": "max((w^T × μ - Rf) / √(w^T × Σ × w))",
-    },
-    "min_risk": {
-        "emoji": "🛡️",
-        "label": "Minimize Risk",
-        "description": "Conservative strategy - minimize portfolio volatility while maintaining target return.",
-        "formula": "min(√(w^T × Σ × w))",
     },
 }
 
-# ============================================================================
-# RISK METRICS DEFINITIONS
-# ============================================================================
+# ═══════════════════════════════════════════════════════════════════════════════
+# SPACING & LAYOUT
+# ═══════════════════════════════════════════════════════════════════════════════
 
-RISK_METRICS = {
-    "return": {
-        "label": "Annual Return",
-        "emoji": "📈",
-        "formula": "Sum of (weight × asset_return)",
-        "interpretation": "Expected annual portfolio return (%)",
-    },
-    "volatility": {
-        "label": "Volatility (Std Dev)",
-        "emoji": "📊",
-        "formula": "√(w^T × Σ × w) × √252",
-        "interpretation": "Portfolio risk measured as annualized standard deviation (%)",
-    },
-    "sharpe": {
-        "label": "Sharpe Ratio",
-        "emoji": "⚡",
-        "formula": "(Portfolio Return - Risk-Free Rate) / Volatility",
-        "interpretation": "Return per unit of risk taken (higher is better, >1 is excellent)",
-    },
-    "sortino": {
-        "label": "Sortino Ratio",
-        "emoji": "🎯",
-        "formula": "(Portfolio Return - Risk-Free Rate) / Downside Deviation",
-        "interpretation": "Return per unit of downside risk (ignores upside volatility)",
-    },
-    "calmar": {
-        "label": "Calmar Ratio",
-        "emoji": "📉",
-        "formula": "Annual Return / Maximum Drawdown",
-        "interpretation": "Return relative to largest loss (>1 is good)",
-    },
-    "information": {
-        "label": "Information Ratio",
-        "emoji": "ℹ️",
-        "formula": "(Portfolio Return - Benchmark Return) / Tracking Error",
-        "interpretation": "Excess return per unit of tracking error vs benchmark",
-    },
-    "max_drawdown": {
-        "label": "Maximum Drawdown",
-        "emoji": "📉",
-        "formula": "(Peak Value - Trough Value) / Peak Value",
-        "interpretation": "Largest peak-to-trough decline (%)",
-    },
-    "var": {
-        "label": "Value at Risk (95%)",
-        "emoji": "⚠️",
-        "formula": "5th percentile of returns distribution",
-        "interpretation": "Maximum expected loss in worst 5% of scenarios (%)",
-    }
+SPACING = {
+    "xs": "0.25rem",
+    "sm": "0.5rem",
+    "md": "1rem",
+    "lg": "1.5rem",
+    "xl": "2rem",
+    "xxl": "3rem",
 }
 
-# ============================================================================
-# PORTFOLIO PARAMETERS
-# ============================================================================
+# ═══════════════════════════════════════════════════════════════════════════════
+# THEME DICTIONARY - EASY ACCESS
+# ═══════════════════════════════════════════════════════════════════════════════
 
-PORTFOLIO_PARAMS = {
-    "lookback_min": 30,           # Minimum 30 days
-    "lookback_max": 90,           # Maximum 90 days (3 months for futures)
-    "lookback_default": 90,       # Default 90 days
-    "risk_free_rate_min": 0.0,    # Minimum risk-free rate
-    "risk_free_rate_max": 0.10,   # Maximum 10%
-    "risk_free_rate_default": 0.06,  # Default 6% (India RBI rate approx)
-    "num_frontier_points": 100,   # Points on efficient frontier
-    "weight_min": 0.0,            # Minimum weight per asset
-    "weight_max": 1.0,            # Maximum weight per asset
+THEME = {
+    "colors": COLORS,
+    "typography": TYPOGRAPHY,
+    "sidebar": SIDEBAR_CONFIG,
+    "hero": HERO_HEADER,
+    "cards": METRIC_CARD,
+    "footer": FOOTER_CONFIG,
+    "spacing": SPACING,
 }
 
-# ============================================================================
-# STREAMLIT CONFIGURATION
-# ============================================================================
+# ═══════════════════════════════════════════════════════════════════════════════
+# APP BRANDING
+# ═══════════════════════════════════════════════════════════════════════════════
 
-APP_CONFIG = {
-    "page_title": "🏔️ Multi-Asset Portfolio Optimizer",
-    "page_icon": "📊",
-    "layout": "wide",
-    "initial_sidebar_state": "expanded",
-}
-
-# ============================================================================
-# STYLE CONSTANTS
-# ============================================================================
-
-STYLE_CONSTANTS = {
-    "border_radius": "10px",
-    "box_shadow": "0px 2px 10px rgba(0,0,0,0.1)",
-    "padding": "20px",
-    "margin": "10px",
-    "transition": "all 0.3s ease",
-}
-
-# ============================================================================
-# BENCHMARK SELECTION
-# ============================================================================
-
-BENCHMARKS = {
-    "^NSEI": {
-        "name": "Nifty 50",
-        "description": "Default for Indian equity portfolios",
-        "ticker": "^NSEI",
-    },
-    "^GSPC": {
-        "name": "S&P 500",
-        "description": "Default for US equity portfolios",
-        "ticker": "^GSPC",
-    },
-}
-
-# ============================================================================
-# CURRENCY SYMBOLS & FORMATTING
-# ============================================================================
-
-CURRENCY_FORMATS = {
-    "INR": "₹",
-    "USD": "$",
-    "EUR": "€",
-    "GBP": "£",
-}
-
-# ============================================================================
-# TIME PERIODS FOR ANALYSIS
-# ============================================================================
-
-TIME_PERIODS = {
-    "1M": {"days": 30, "label": "1 Month"},
-    "2M": {"days": 60, "label": "2 Months"},
-    "3M": {"days": 90, "label": "3 Months (Recommended)"},
-}
-
-# ============================================================================
-# DEFAULT PORTFOLIO ALLOCATION (for demo)
-# ============================================================================
-
-DEFAULT_ALLOCATION = {
-    "allocation_method": "equal_weight",  # equal_weight, risk_parity, custom
-    "description": "Automatic equal-weight allocation across selected assets",
-}
-
-# ============================================================================
-# VaR CONFIDENCE LEVELS
-# ============================================================================
-
-VAR_CONFIDENCE_LEVELS = [0.95, 0.99]  # 95% and 99% confidence intervals
-
-# ============================================================================
-# MONTE CARLO SIMULATION PARAMETERS (Optional)
-# ============================================================================
-
-MONTE_CARLO_PARAMS = {
-    "num_simulations": 10000,
-    "confidence_levels": [0.95, 0.99],
-}
-
-# ============================================================================
-# EXPORT FORMATS
-# ============================================================================
-
-EXPORT_FORMATS = {
-    "csv": "CSV (.csv)",
-    "json": "JSON (.json)",
-    "excel": "Excel (.xlsx)",
+APP_BRANDING = {
+    "name": "🏔️ Multi-Asset Portfolio Optimizer",
+    "tagline": "Powered by Modern Portfolio Theory & Risk Analytics",
+    "author": "Prof. V. Ravichandran",
+    "author_title": "28+ Years Corporate Finance & Banking Experience\n10+ Years Academic Excellence",
+    "platform": "The Mountain Path - World of Finance",
 }
