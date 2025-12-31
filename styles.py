@@ -1,3 +1,4 @@
+
 """
 Styling Module for Multi-Asset Portfolio Optimization App
 Provides comprehensive CSS styling with high-contrast inputs
@@ -225,7 +226,7 @@ def apply_custom_styles():
     }}
     
     [data-testid="stSelectbox"] div[data-baseweb="select"] * {{
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
     }}
     
     /* Multiselect */
@@ -250,7 +251,7 @@ def apply_custom_styles():
     
     [data-testid="stNumberInput"] input {{
         background-color: {COLORS['light_blue']} !important;
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
         border: 2px solid {COLORS['gold']} !important;
         border-radius: 6px !important;
         padding: 10px !important;
@@ -270,7 +271,7 @@ def apply_custom_styles():
     
     [data-testid="stTextInput"] input {{
         background-color: {COLORS['light_blue']} !important;
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
         border: 2px solid {COLORS['gold']} !important;
         border-radius: 6px !important;
         padding: 10px !important;
@@ -336,14 +337,14 @@ def apply_custom_styles():
     
     [data-testid="stDataFrame"] {{
         background-color: {COLORS['light_blue']} !important;
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
         border-radius: 8px !important;
         overflow: hidden !important;
     }}
     
     [data-testid="stDataFrame"] tr {{
         background-color: {COLORS['light_blue']} !important;
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
         border: 1px solid {COLORS['gold']} !important;
     }}
     
@@ -373,7 +374,7 @@ def apply_custom_styles():
     
     [data-testid="stExpander"] button {{
         background-color: {COLORS['light_blue']} !important;
-        color: {COLORS['text_light']} !important;
+        color: #000000 !important;
     }}
     
     [data-testid="stExpander"] button:hover {{
@@ -506,6 +507,42 @@ def apply_custom_styles():
     /* Smooth transitions */
     * {{
         transition: background-color 0.2s ease !important;
+    }}
+    
+    /* ====================================================================
+       TEXT VISIBILITY FIX - ENSURE DARK TEXT ON LIGHT BACKGROUNDS
+       ==================================================================== */
+    
+    /* Ensure all text on light backgrounds is dark */
+    [data-testid="stMarkdownContainer"] {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stMarkdownContainer"] p {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stMarkdownContainer"] span {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stMarkdownContainer"] * {{
+        color: #000000 !important;
+    }}
+    
+    /* Info/Warning/Error box styling */
+    [data-testid="stNotification"] {{
+        background-color: {COLORS['light_blue']} !important;
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stNotification"] * {{
+        color: #000000 !important;
+    }}
+    
+    /* Ensure success/warning/error messages are readable */
+    .stAlert {{
+        color: #000000 !important;
     }}
     
     </style>
