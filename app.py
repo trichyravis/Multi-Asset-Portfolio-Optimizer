@@ -114,7 +114,7 @@ with st.sidebar:
     # LinkedIn Button
     st.markdown("""
     <div style='text-align: center; margin-top: 1rem;'>
-        <a href='https://linkedin.com/in/prof-v-ravichandran' target='_blank' style='text-decoration: none;'>
+        <a href='https://www.linkedin.com/in/trichyravis' target='_blank' style='text-decoration: none;'>
             <button style='
                 background-color: #0A66C2; 
                 color: white; 
