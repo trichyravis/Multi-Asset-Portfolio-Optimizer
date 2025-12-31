@@ -117,16 +117,50 @@ if "run_optimization" not in st.session_state:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 ASSET_DATA = {
+    # Tech Giants
     "AAPL": {"return": 28.5, "volatility": 32.1}, "MSFT": {"return": 26.3, "volatility": 28.9},
     "GOOGL": {"return": 24.7, "volatility": 30.2}, "AMZN": {"return": 22.1, "volatility": 34.5},
-    "NVDA": {"return": 35.2, "volatility": 45.8}, "JPM": {"return": 15.3, "volatility": 25.6},
-    "BAC": {"return": 12.5, "volatility": 28.3}, "XOM": {"return": 8.9, "volatility": 22.4},
+    "NVDA": {"return": 35.2, "volatility": 45.8}, "META": {"return": 25.8, "volatility": 38.4},
+    "INTC": {"return": 18.9, "volatility": 31.5}, "AMD": {"return": 22.4, "volatility": 42.1},
+    
+    # Financial Services
+    "JPM": {"return": 15.3, "volatility": 25.6}, "BAC": {"return": 12.5, "volatility": 28.3},
+    "WFC": {"return": 11.8, "volatility": 27.5}, "GS": {"return": 14.2, "volatility": 29.8},
+    "V": {"return": 19.5, "volatility": 24.3}, "MA": {"return": 20.1, "volatility": 25.6},
+    "PYPL": {"return": 16.8, "volatility": 38.2},
+    
+    # Healthcare & Pharma
+    "JNJ": {"return": 10.2, "volatility": 18.4}, "UNH": {"return": 17.6, "volatility": 22.1},
+    "PFE": {"return": 8.9, "volatility": 21.3}, "LLY": {"return": 14.3, "volatility": 20.2},
+    "ABBV": {"return": 12.7, "volatility": 19.8},
+    
+    # Consumer & Retail
     "PG": {"return": 9.7, "volatility": 16.8}, "KO": {"return": 7.3, "volatility": 18.2},
+    "PEP": {"return": 8.5, "volatility": 17.3}, "HD": {"return": 13.2, "volatility": 21.5},
+    "MCD": {"return": 10.8, "volatility": 19.2}, "COST": {"return": 11.5, "volatility": 20.1},
+    "WMT": {"return": 9.3, "volatility": 17.8},
+    
+    # Energy & Utilities
+    "XOM": {"return": 8.9, "volatility": 22.4}, "CVX": {"return": 8.2, "volatility": 23.1},
+    "SO": {"return": 6.5, "volatility": 14.2},
+    
+    # Media & Entertainment
+    "NFLX": {"return": 20.3, "volatility": 42.8}, "DIS": {"return": 12.4, "volatility": 26.3},
+    
+    # Transportation & Other
+    "TSLA": {"return": 32.1, "volatility": 58.3}, "BA": {"return": 9.8, "volatility": 29.4},
+    
+    # Bonds
     "BND": {"return": 4.2, "volatility": 6.3}, "AGG": {"return": 4.5, "volatility": 6.8},
     "LQD": {"return": 5.1, "volatility": 7.4}, "TLT": {"return": 3.8, "volatility": 8.9},
-    "SHV": {"return": 3.2, "volatility": 2.1}, "GLD": {"return": 6.5, "volatility": 14.2},
-    "SLV": {"return": 5.8, "volatility": 18.6}, "USO": {"return": 3.2, "volatility": 22.1},
-    "DBC": {"return": 2.1, "volatility": 19.8}, "UUP": {"return": 1.5, "volatility": 8.3},
+    "SHV": {"return": 3.2, "volatility": 2.1},
+    
+    # Commodities
+    "GLD": {"return": 6.5, "volatility": 14.2}, "SLV": {"return": 5.8, "volatility": 18.6},
+    "USO": {"return": 3.2, "volatility": 22.1}, "DBC": {"return": 2.1, "volatility": 19.8},
+    "UUP": {"return": 1.5, "volatility": 8.3},
+    
+    # Cryptocurrencies
     "BTC": {"return": 65.3, "volatility": 78.5}, "ETH": {"return": 58.2, "volatility": 82.3},
     "BNB": {"return": 52.1, "volatility": 88.2}, "ADA": {"return": 45.3, "volatility": 92.4},
     "SOL": {"return": 48.9, "volatility": 95.1},
