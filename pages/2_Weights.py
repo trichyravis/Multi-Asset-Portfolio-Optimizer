@@ -69,22 +69,11 @@ st.markdown(f"""
     """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# WEIGHT ADJUSTMENT SLIDERS
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown(f"""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>⚙️ ADJUST WEIGHTS</h2>
-        <p style='color: white;'>Use sliders to set allocation. Total must equal 100%.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# ═══════════════════════════════════════════════════════════════════════════════
 # MANUAL WEIGHT ADJUSTMENT (Percentage Input)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
         <h2 style='color: #FFD700; margin-top: 0;'>⚙️ ADJUST PORTFOLIO WEIGHTS</h2>
         <p style='color: #90EE90; margin: 0.5rem 0 0 0;'>Enter the percentage allocation for each asset (must total 100%)</p>
     </div>
@@ -143,17 +132,27 @@ with col2:
 with col3:
     if st.button("🔄 Reset to Equal", help="Reset all weights to equal distribution", use_container_width=True):
         equal_weight = 1.0 / num_assets
+        # Update session state with equal weights
         for asset in selected_assets_list:
             st.session_state.asset_weights_adjusted[asset] = equal_weight
+            # Clear the widget input state to force reload from session state
+            if f"input_{asset}" in st.session_state:
+                del st.session_state[f"input_{asset}"]
         st.rerun()
 
 with col4:
     if st.button("📋 Auto-Normalize", help="Automatically adjust to 100%", use_container_width=True):
         if total_weight > 0:
+            # Normalize weights to sum to 100%
             for asset in selected_assets_list:
-                weights[asset] = weights[asset] / total_weight
-                st.session_state.asset_weights_adjusted[asset] = weights[asset]
-        st.rerun()
+                normalized_weight = weights[asset] / total_weight
+                st.session_state.asset_weights_adjusted[asset] = normalized_weight
+                # Clear the widget input state to force reload from session state
+                if f"input_{asset}" in st.session_state:
+                    del st.session_state[f"input_{asset}"]
+            st.rerun()
+        else:
+            st.error("❌ Cannot normalize - all weights are 0. Please enter values first.")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # WEIGHTS SUMMARY TABLE
