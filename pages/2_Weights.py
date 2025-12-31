@@ -76,6 +76,7 @@ st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
         <h2 style='color: #FFD700; margin-top: 0;'>⚙️ ADJUST PORTFOLIO WEIGHTS</h2>
         <p style='color: #90EE90; margin: 0.5rem 0 0 0;'>Enter the percentage allocation for each asset (must total 100%)</p>
+        <p style='color: #FFD700; margin: 0.5rem 0 0 0;'>💡 Values appear in gold boxes on the right side</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -83,7 +84,7 @@ st.markdown("""
 if "asset_weights_adjusted" not in st.session_state or len(st.session_state.asset_weights_adjusted) == 0:
     st.session_state.asset_weights_adjusted = {asset: value for asset, value in st.session_state.selected_assets.items()}
 
-# Create input fields for each asset in 2 columns
+# Create input fields for each asset in 2 columns with visible values
 weights = {}
 cols = st.columns(2)
 
@@ -94,16 +95,30 @@ for idx, asset in enumerate(selected_assets_list):
         # Get current weight
         current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
         
-        # Create a nice input field with validation
-        weight_pct = st.number_input(
-            f"📊 {asset} (%)",
-            min_value=0.0,
-            max_value=100.0,
-            value=round(current_weight * 100, 2),
-            step=0.1,
-            key=f"input_{asset}",
-            help=f"Enter percentage allocation for {asset}"
-        )
+        # Create 3-column layout for better visibility
+        input_col, display_col = st.columns([3, 1])
+        
+        with input_col:
+            # Create a nice input field with validation
+            weight_pct = st.number_input(
+                f"📊 {asset} (%)",
+                min_value=0.0,
+                max_value=100.0,
+                value=round(current_weight * 100, 2),
+                step=0.1,
+                key=f"input_{asset}",
+                help=f"Enter percentage allocation for {asset}",
+                label_visibility="visible"
+            )
+        
+        with display_col:
+            # Display the value prominently with high contrast
+            st.markdown(f"""
+            <div style='padding: 0.5rem; background-color: #FFD700; border-radius: 0.25rem; text-align: center; margin-top: 1.5rem;'>
+                <p style='color: #003366; font-weight: bold; font-size: 1rem; margin: 0;'>{weight_pct:.2f}%</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
         weights[asset] = weight_pct / 100.0
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -114,6 +129,27 @@ total_weight = sum(weights.values())
 total_pct = total_weight * 100
 
 st.markdown("")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# QUICK REFERENCE - ENTERED VALUES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #FFD700; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;'>
+        <h3 style='color: #003366; margin: 0;'>📊 YOUR ENTERED VALUES</h3>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Create a summary table with high contrast
+summary_cols = st.columns(len(selected_assets_list))
+for idx, asset in enumerate(selected_assets_list):
+    with summary_cols[idx]:
+        st.markdown(f"""
+        <div style='background-color: #004d80; padding: 1rem; border-radius: 0.5rem; text-align: center; border: 2px solid #FFD700;'>
+            <p style='color: #90EE90; margin: 0; font-size: 0.85rem;'>{asset}</p>
+            <h2 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.5rem;'>{weights[asset]*100:.2f}%</h2>
+        </div>
+        """, unsafe_allow_html=True)
 
 # Display validation status
 col1, col2, col3, col4 = st.columns(4)
