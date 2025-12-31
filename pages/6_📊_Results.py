@@ -113,37 +113,57 @@ else:
         st.markdown("")
         
         st.markdown("""
-            <div style='background-color: #003366; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;'>
-                <h4 style='color: #FFD700; margin: 0;'>📋 Weight Details:</h4>
+            <div style='background-color: #003366 !important; padding: 1.5rem !important; border-radius: 0.5rem !important; margin-bottom: 2rem !important;'>
+                <h4 style='color: #FFD700 !important; margin: 0 !important;'>📋 Weight Details:</h4>
             </div>
             """, unsafe_allow_html=True)
         
-        # Build weight details HTML
-        weight_details_html = """
-            <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem;'>
-        """
-        
+        # Build weight details with stronger styling
         for asset in selected_assets:
             initial = initial_weights.get(asset, 0)
             optimized = optimized_weights.get(asset, 0)
             change = optimized - initial
             
-            weight_details_html += f"""
-                <div style='background-color: #004d80; color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border-left: 4px solid #FFD700;'>
-                    <div style='display: flex; justify-content: space-between; align-items: center;'>
-                        <strong style='color: white; font-size: 1.05rem;'>{ASSET_STATS[asset].get('emoji', '📊')} {asset}</strong>
-                        <div style='text-align: right; color: white; font-size: 0.95rem;'>
-                            <span>Before: <span style='color: #FFD700; font-weight: bold;'>{initial:.2f}%</span></span> | 
-                            <span>After: <span style='color: #90EE90; font-weight: bold;'>{optimized:.2f}%</span></span> | 
-                            <span>Change: <span style='color: #FFB6C1; font-weight: bold;'>{change:+.2f}%</span></span>
-                        </div>
+            # Create individual boxes with strong color specifications
+            weight_box_html = f"""
+            <div style='
+                background-color: #004d80 !important;
+                border-left: 5px solid #FFD700 !important;
+                padding: 1.25rem !important;
+                margin-bottom: 1rem !important;
+                border-radius: 0.4rem !important;
+            '>
+                <div style='
+                    display: flex !important;
+                    justify-content: space-between !important;
+                    align-items: center !important;
+                    width: 100% !important;
+                '>
+                    <div style='
+                        color: white !important;
+                        font-size: 1.1rem !important;
+                        font-weight: bold !important;
+                        letter-spacing: 0.5px !important;
+                    '>
+                        {ASSET_STATS[asset].get('emoji', '📊')} <span style='color: white !important;'>{asset}</span>
+                    </div>
+                    <div style='
+                        color: white !important;
+                        font-size: 0.95rem !important;
+                        text-align: right !important;
+                        white-space: nowrap !important;
+                    '>
+                        <span style='color: white !important;'>Before: </span>
+                        <span style='color: #FFD700 !important; font-weight: bold !important;'>{initial:.2f}%</span>
+                        <span style='color: white !important;'> | After: </span>
+                        <span style='color: #90EE90 !important; font-weight: bold !important;'>{optimized:.2f}%</span>
+                        <span style='color: white !important;'> | Change: </span>
+                        <span style='color: #FFB6C1 !important; font-weight: bold !important;'>{change:+.2f}%</span>
                     </div>
                 </div>
+            </div>
             """
-        
-        weight_details_html += "</div>"
-        
-        st.markdown(weight_details_html, unsafe_allow_html=True)
+            st.markdown(weight_box_html, unsafe_allow_html=True)
         
         st.markdown("")
         
