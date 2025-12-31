@@ -85,15 +85,117 @@ def apply_main_styles():
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
-       SIDEBAR - LIGHT GRAY
+       SIDEBAR - DARK BLUE WITH WHITE TEXT
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     [data-testid="stSidebar"] {{
-        background: #f5f5f5;
+        background: {COLORS['dark_blue']};
     }}
     
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {{
-        color: #333333;
+        color: {COLORS['text_light']};
+    }}
+    
+    /* Sidebar text color - white for all text elements */
+    [data-testid="stSidebar"] {{
+        color: {COLORS['text_light']};
+    }}
+    
+    [data-testid="stSidebar"] * {{
+        color: {COLORS['text_light']};
+    }}
+    
+    /* Sidebar headings */
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] h4,
+    [data-testid="stSidebar"] h5,
+    [data-testid="stSidebar"] h6 {{
+        color: {COLORS['text_light']};
+    }}
+    
+    /* Sidebar links */
+    [data-testid="stSidebar"] a {{
+        color: {COLORS['gold']};
+    }}
+    
+    [data-testid="stSidebar"] a:hover {{
+        color: {COLORS['light_blue']};
+    }}
+    
+    /* Sidebar nav items */
+    [data-testid="stSidebar"] [data-testid="stNavLink"] {{
+        color: {COLORS['text_light']};
+    }}
+    
+    /* Sidebar buttons */
+    [data-testid="stSidebar"] .stButton > button {{
+        background: {COLORS['dark_blue']};
+        color: {COLORS['text_light']};
+        border: 1px solid {COLORS['gold']};
+    }}
+    
+    [data-testid="stSidebar"] .stButton > button:hover {{
+        background: {COLORS['gold']};
+        color: {COLORS['dark_blue']};
+    }}
+    
+    /* Sidebar navigation link styling */
+    [data-testid="stSidebar"] [data-testid="stNavLink"] {{
+        color: {COLORS['text_light']} !important;
+        background: transparent !important;
+    }}
+    
+    [data-testid="stSidebar"] [data-testid="stNavLink"]:hover {{
+        background: rgba(255, 215, 0, 0.2) !important;
+        color: {COLORS['gold']} !important;
+    }}
+    
+    /* Sidebar active link */
+    [data-testid="stSidebar"] [data-testid="stNavLink"][aria-selected="true"] {{
+        background: rgba(255, 215, 0, 0.3) !important;
+        color: {COLORS['gold']} !important;
+    }}
+    
+    /* Sidebar sections and radio buttons */
+    [data-testid="stSidebar"] .stRadio > label {{
+        color: {COLORS['text_light']};
+    }}
+    
+    [data-testid="stSidebar"] .stCheckbox > label {{
+        color: {COLORS['text_light']};
+    }}
+    
+    [data-testid="stSidebar"] .stSelectbox > label {{
+        color: {COLORS['text_light']};
+    }}
+    
+    [data-testid="stSidebar"] .stNumberInput > label {{
+        color: {COLORS['text_light']};
+    }}
+    
+    [data-testid="stSidebar"] .stTextInput > label {{
+        color: {COLORS['text_light']};
+    }}
+    
+    /* Sidebar input fields */
+    [data-testid="stSidebar"] input {{
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: {COLORS['text_light']} !important;
+        border: 1px solid {COLORS['light_blue']} !important;
+    }}
+    
+    [data-testid="stSidebar"] select {{
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: {COLORS['text_light']} !important;
+        border: 1px solid {COLORS['light_blue']} !important;
+    }}
+    
+    /* Sidebar divider/separator */
+    [data-testid="stSidebar"] hr {{
+        border-color: {COLORS['light_blue']};
+        opacity: 0.5;
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
