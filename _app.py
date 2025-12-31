@@ -1,7 +1,8 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
-Multi-Asset Portfolio Optimizer - Main Application
+Multi-Asset Portfolio Optimizer - Main Entry Point
 ═══════════════════════════════════════════════════════════════════════════════
 
 Prof. V. Ravichandran
@@ -10,37 +11,17 @@ Prof. V. Ravichandran
 """
 
 import streamlit as st
-from config_enhanced import PAGE_CONFIG
-from styles_enhanced import apply_main_styles, render_header, render_footer
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# PAGE CONFIGURATION
+# MAIN ENTRY POINT - REDIRECT TO HOME PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.set_page_config(
-    page_title=PAGE_CONFIG["page_title"],
-    page_icon=PAGE_CONFIG["page_icon"],
-    layout=PAGE_CONFIG["layout"],
-    initial_sidebar_state=PAGE_CONFIG["initial_sidebar_state"]
+    page_title="🏔️ Portfolio Optimizer - The Mountain Path",
+    page_icon="🏔️",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# APPLY STYLES & RENDER HEADER
-# ═══════════════════════════════════════════════════════════════════════════════
-
-apply_main_styles()
-render_header(title="🏔️ Portfolio Optimizer")
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# MULTIPAGE APP
-# ═══════════════════════════════════════════════════════════════════════════════
-
-# Streamlit automatically loads pages from pages/ folder:
-# - pages/1_🏠_Home_Enhanced.py
-# - pages/2_📊_Results_Enhanced.py
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# RENDER FOOTER
-# ═══════════════════════════════════════════════════════════════════════════════
-
-render_footer()
+# Redirect to Home page immediately
+st.switch_page("pages/1_🏠_Home.py")
