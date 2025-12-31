@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -58,7 +59,10 @@ PAGE_CONFIG = {
 
 ASSET_CLASSES = {
     "Equities": {
+        "emoji": "📈",
         "description": "Individual stocks - Direct ownership in companies",
+        "risk": "High",
+        "return": "8-28%",
         "assets": {
             "AAPL": {"name": "Apple Inc.", "sector": "Technology"},
             "MSFT": {"name": "Microsoft Corporation", "sector": "Technology"},
@@ -73,7 +77,10 @@ ASSET_CLASSES = {
         }
     },
     "Indices": {
+        "emoji": "📊",
         "description": "Market indices - Diversified baskets of stocks",
+        "risk": "Medium",
+        "return": "8-15%",
         "assets": {
             "SPY": {"name": "S&P 500 ETF", "description": "Tracks top 500 US companies"},
             "QQQ": {"name": "Nasdaq-100 ETF", "description": "Tracks 100 largest non-financial stocks"},
@@ -83,7 +90,10 @@ ASSET_CLASSES = {
         }
     },
     "Bonds": {
+        "emoji": "💰",
         "description": "Fixed income securities - Lower risk, steady returns",
+        "risk": "Low",
+        "return": "3-5%",
         "assets": {
             "BND": {"name": "Vanguard Total Bond ETF", "description": "Total US bond market"},
             "AGG": {"name": "iShares Core US Aggregate Bond ETF", "description": "US investment-grade bonds"},
@@ -93,7 +103,10 @@ ASSET_CLASSES = {
         }
     },
     "Commodities": {
+        "emoji": "🏆",
         "description": "Raw materials - Inflation hedge and diversification",
+        "risk": "Medium-High",
+        "return": "2-8%",
         "assets": {
             "GLD": {"name": "SPDR Gold Shares", "description": "Physical gold"},
             "SLV": {"name": "iShares Silver Trust", "description": "Physical silver"},
@@ -103,7 +116,10 @@ ASSET_CLASSES = {
         }
     },
     "Cryptocurrencies": {
+        "emoji": "₿",
         "description": "Digital assets - High growth, high volatility",
+        "risk": "Very High",
+        "return": "30-60%",
         "assets": {
             "BTC": {"name": "Bitcoin", "description": "Largest cryptocurrency by market cap"},
             "ETH": {"name": "Ethereum", "description": "Second largest cryptocurrency, smart contracts"},
@@ -117,41 +133,41 @@ ASSET_CLASSES = {
 
 ASSET_STATS = {
     # Equities
-    "AAPL": {"return": 0.28, "volatility": 0.32, "description": "Apple Inc."},
-    "MSFT": {"return": 0.25, "volatility": 0.28, "description": "Microsoft"},
-    "GOOGL": {"return": 0.20, "volatility": 0.26, "description": "Alphabet/Google"},
-    "AMZN": {"return": 0.22, "volatility": 0.30, "description": "Amazon"},
-    "TSLA": {"return": 0.35, "volatility": 0.45, "description": "Tesla"},
-    "META": {"return": 0.18, "volatility": 0.35, "description": "Meta/Facebook"},
-    "NVDA": {"return": 0.32, "volatility": 0.38, "description": "NVIDIA"},
-    "JPM": {"return": 0.12, "volatility": 0.22, "description": "JPMorgan Chase"},
-    "V": {"return": 0.16, "volatility": 0.20, "description": "Visa"},
-    "WMT": {"return": 0.10, "volatility": 0.18, "description": "Walmart"},
+    "AAPL": {"return": 0.28, "volatility": 0.32, "description": "Apple Inc.", "emoji": "📈", "class": "Equities"},
+    "MSFT": {"return": 0.25, "volatility": 0.28, "description": "Microsoft", "emoji": "📈", "class": "Equities"},
+    "GOOGL": {"return": 0.20, "volatility": 0.26, "description": "Alphabet/Google", "emoji": "📈", "class": "Equities"},
+    "AMZN": {"return": 0.22, "volatility": 0.30, "description": "Amazon", "emoji": "📈", "class": "Equities"},
+    "TSLA": {"return": 0.35, "volatility": 0.45, "description": "Tesla", "emoji": "📈", "class": "Equities"},
+    "META": {"return": 0.18, "volatility": 0.35, "description": "Meta/Facebook", "emoji": "📈", "class": "Equities"},
+    "NVDA": {"return": 0.32, "volatility": 0.38, "description": "NVIDIA", "emoji": "📈", "class": "Equities"},
+    "JPM": {"return": 0.12, "volatility": 0.22, "description": "JPMorgan Chase", "emoji": "📈", "class": "Equities"},
+    "V": {"return": 0.16, "volatility": 0.20, "description": "Visa", "emoji": "📈", "class": "Equities"},
+    "WMT": {"return": 0.10, "volatility": 0.18, "description": "Walmart", "emoji": "📈", "class": "Equities"},
     
     # Indices
-    "SPY": {"return": 0.12, "volatility": 0.18, "description": "S&P 500"},
-    "QQQ": {"return": 0.15, "volatility": 0.22, "description": "Nasdaq-100"},
-    "IWM": {"return": 0.11, "volatility": 0.20, "description": "Russell 2000"},
-    "EFA": {"return": 0.08, "volatility": 0.18, "description": "International"},
-    "VTI": {"return": 0.11, "volatility": 0.17, "description": "Total Market"},
+    "SPY": {"return": 0.12, "volatility": 0.18, "description": "S&P 500", "emoji": "📊", "class": "Indices"},
+    "QQQ": {"return": 0.15, "volatility": 0.22, "description": "Nasdaq-100", "emoji": "📊", "class": "Indices"},
+    "IWM": {"return": 0.11, "volatility": 0.20, "description": "Russell 2000", "emoji": "📊", "class": "Indices"},
+    "EFA": {"return": 0.08, "volatility": 0.18, "description": "International", "emoji": "📊", "class": "Indices"},
+    "VTI": {"return": 0.11, "volatility": 0.17, "description": "Total Market", "emoji": "📊", "class": "Indices"},
     
     # Bonds
-    "BND": {"return": 0.04, "volatility": 0.05, "description": "Total Bonds"},
-    "AGG": {"return": 0.04, "volatility": 0.05, "description": "Aggregate Bonds"},
-    "SHV": {"return": 0.03, "volatility": 0.02, "description": "Short Treasury"},
-    "TLT": {"return": 0.05, "volatility": 0.08, "description": "Long Treasury"},
-    "LQD": {"return": 0.05, "volatility": 0.06, "description": "Corp Bonds"},
+    "BND": {"return": 0.04, "volatility": 0.05, "description": "Total Bonds", "emoji": "💰", "class": "Bonds"},
+    "AGG": {"return": 0.04, "volatility": 0.05, "description": "Aggregate Bonds", "emoji": "💰", "class": "Bonds"},
+    "SHV": {"return": 0.03, "volatility": 0.02, "description": "Short Treasury", "emoji": "💰", "class": "Bonds"},
+    "TLT": {"return": 0.05, "volatility": 0.08, "description": "Long Treasury", "emoji": "💰", "class": "Bonds"},
+    "LQD": {"return": 0.05, "volatility": 0.06, "description": "Corp Bonds", "emoji": "💰", "class": "Bonds"},
     
     # Commodities
-    "GLD": {"return": 0.06, "volatility": 0.15, "description": "Gold"},
-    "SLV": {"return": 0.08, "volatility": 0.22, "description": "Silver"},
-    "USO": {"return": 0.02, "volatility": 0.25, "description": "Oil"},
-    "DBC": {"return": 0.03, "volatility": 0.18, "description": "Commodities"},
-    "PDBC": {"return": 0.04, "volatility": 0.17, "description": "Commodity Index"},
+    "GLD": {"return": 0.06, "volatility": 0.15, "description": "Gold", "emoji": "🏆", "class": "Commodities"},
+    "SLV": {"return": 0.08, "volatility": 0.22, "description": "Silver", "emoji": "🏆", "class": "Commodities"},
+    "USO": {"return": 0.02, "volatility": 0.25, "description": "Oil", "emoji": "🏆", "class": "Commodities"},
+    "DBC": {"return": 0.03, "volatility": 0.18, "description": "Commodities", "emoji": "🏆", "class": "Commodities"},
+    "PDBC": {"return": 0.04, "volatility": 0.17, "description": "Commodity Index", "emoji": "🏆", "class": "Commodities"},
     
     # Cryptocurrencies
-    "BTC": {"return": 0.60, "volatility": 0.75, "description": "Bitcoin"},
-    "ETH": {"return": 0.55, "volatility": 0.80, "description": "Ethereum"},
+    "BTC": {"return": 0.60, "volatility": 0.75, "description": "Bitcoin", "emoji": "₿", "class": "Cryptocurrencies"},
+    "ETH": {"return": 0.55, "volatility": 0.80, "description": "Ethereum", "emoji": "₿", "class": "Cryptocurrencies"},
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
