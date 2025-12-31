@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -304,20 +305,30 @@ with col3:
     - See optimized portfolio
     """)
 
-# Navigation info
+# Navigation info with breadcrumb
 st.markdown("")
-col1, col2 = st.columns(2)
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🔄 NAVIGATION</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-with col1:
-    st.info("""
-    🎯 **Next Step:** Go to sidebar → 🎯 **Objective** to choose your optimization goal.
-    """)
+nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 1])
 
-with col2:
+with nav_col1:
+    if st.button("← Back to Weights", key="analysis_to_weights", use_container_width=True):
+        st.switch_page("pages/2_Weights.py")
+
+with nav_col2:
     st.markdown("""
-    **Continue:**
-    - 🚀 **Optimize** → Run optimization
-    - 📊 **Results** → View optimized portfolio
-    """)
+        <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 3/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Analysis</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with nav_col3:
+    if st.button("Next: Objective →", key="analysis_to_objective", use_container_width=True):
+        st.switch_page("pages/4_Objective.py")
 
 render_footer()
