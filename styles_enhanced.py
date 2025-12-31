@@ -349,7 +349,7 @@ def apply_main_styles():
     }}
     
     [data-testid="stSlider"] label {{
-        color: {COLORS['text_light']} !important;
+        color: {COLORS['gold']} !important;
         font-weight: 600 !important;
         font-size: 14px !important;
     }}
