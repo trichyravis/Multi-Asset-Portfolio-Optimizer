@@ -1,3 +1,4 @@
+
 """
 Portfolio Analytics Module
 Handles visualizations, metrics display, and data analysis
@@ -145,21 +146,28 @@ def display_risk_metrics(opt_results: dict, portfolio_data: dict):
         )
     
     with col2:
-        # Value at Risk (95%)
-        var_95 = np.percentile(daily_returns.mean(axis=1) * weights, 5) * 252
-        st.metric(
-            "⚠️ VaR (95%)",
-            f"{var_95*100:.2f}%",
-            help="Maximum expected loss in worst 5% of scenarios"
-        )
-        
-        # Expected Shortfall
-        es_95 = np.mean(daily_returns[daily_returns < np.percentile(daily_returns, 5)].mean(axis=1) * weights) * 252
-        st.metric(
-            "🚨 Expected Shortfall",
-            f"{es_95*100:.2f}%",
-            help="Average loss in tail events"
-        )
+        # Calculate portfolio daily returns first
+        try:
+            portfolio_daily_returns = (daily_returns * weights).sum(axis=1)
+            
+            # Value at Risk (95%)
+            var_95 = np.percentile(portfolio_daily_returns, 5) * 252
+            st.metric(
+                "⚠️ VaR (95%)",
+                f"{var_95*100:.2f}%",
+                help="Maximum expected loss in worst 5% of scenarios"
+            )
+            
+            # Expected Shortfall
+            tail_returns = portfolio_daily_returns[portfolio_daily_returns <= np.percentile(portfolio_daily_returns, 5)]
+            es_95 = np.mean(tail_returns) * 252
+            st.metric(
+                "🚨 Expected Shortfall",
+                f"{es_95*100:.2f}%",
+                help="Average loss in tail events"
+            )
+        except Exception as e:
+            st.warning(f"Could not calculate risk metrics: {str(e)}")
     
     # Diversification metrics
     st.markdown("### Diversification Analysis")
