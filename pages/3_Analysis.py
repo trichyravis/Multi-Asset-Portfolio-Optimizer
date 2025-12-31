@@ -25,6 +25,72 @@ apply_main_styles()
 render_header()
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# CUSTOM SIDEBAR
+# ═══════════════════════════════════════════════════════════════════════════════
+
+with st.sidebar:
+    st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1.5rem;'>
+        <h3 style='color: #FFD700; margin-top: 0; font-size: 1.3rem;'>📚 About This Tool</h3>
+        <p style='color: white; margin: 0.8rem 0; font-size: 0.95rem; line-height: 1.6;'>
+            Multi-Asset Portfolio Optimizer using Modern Portfolio Theory and advanced optimization algorithms.
+        </p>
+        <p style='color: white; margin: 0.8rem 0; font-size: 0.95rem; line-height: 1.6;'>
+            <strong style='color: #FFD700;'>Key Features:</strong>
+        </p>
+        <ul style='color: white; margin: 0.5rem 0 0 1rem; font-size: 0.9rem; line-height: 1.8;'>
+            <li>📊 Multi-asset class optimization</li>
+            <li>🎯 Risk-return analysis</li>
+            <li>📈 Sharpe ratio maximization</li>
+            <li>⚖️ Efficient frontier calculation</li>
+            <li>💼 Portfolio rebalancing</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("<hr style='border-color: #004d80; margin: 1.5rem 0;'>", unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem;'>
+        <h3 style='color: #FFD700; margin-top: 0; font-size: 1.3rem;'>👨‍🏫 Creator</h3>
+        <p style='color: white; margin: 1rem 0 0.5rem 0; font-size: 1.1rem; font-weight: bold;'>
+            Prof. V. Ravichandran
+        </p>
+        <p style='color: #FFD700; margin: 0.3rem 0; font-size: 0.85rem; font-weight: 600;'>
+            ✨ 28+ Years Corporate Finance & Banking
+        </p>
+        <p style='color: #FFD700; margin: 0.3rem 0 1rem 0; font-size: 0.85rem; font-weight: 600;'>
+            ✨ 10+ Years Academic Excellence
+        </p>
+        <p style='color: #90EE90; margin: 0.5rem 0; font-size: 0.85rem; line-height: 1.5;'>
+            Specializing in Advanced Financial Risk Management, Portfolio Optimization, and Quantitative Finance.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("")
+    
+    st.markdown("""
+    <div style='text-align: center; margin-top: 1rem;'>
+        <a href='https://www.linkedin.com/in/trichyravis' target='_blank' style='text-decoration: none;'>
+            <button style='
+                background-color: #0A66C2; 
+                color: white; 
+                padding: 0.6rem 1.5rem; 
+                border: none; 
+                border-radius: 0.4rem; 
+                font-weight: 600; 
+                font-size: 0.9rem;
+                cursor: pointer;
+                width: 100%;
+            '>
+                🔗 LinkedIn Profile
+            </button>
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # INITIALIZE SESSION STATE
 # ═══════════════════════════════════════════════════════════════════════════════
 
