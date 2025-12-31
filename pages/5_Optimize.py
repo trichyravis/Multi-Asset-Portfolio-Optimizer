@@ -2,7 +2,7 @@
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
-📊 Optimization Results - Final Portfolio Allocation
+🚀 Portfolio Optimization - Run Optimization
 ═══════════════════════════════════════════════════════════════════════════════
 
 Prof. V. Ravichandran
@@ -13,6 +13,7 @@ Prof. V. Ravichandran
 import streamlit as st
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from config_enhanced import PAGE_CONFIG
 from styles_enhanced import apply_main_styles, render_header, render_footer
 
@@ -30,12 +31,12 @@ render_header()
 
 if "selected_assets" not in st.session_state:
     st.session_state.selected_assets = {}
+if "optimization_objective" not in st.session_state:
+    st.session_state.optimization_objective = "Maximize Sharpe Ratio"
 if "optimized_weights" not in st.session_state:
     st.session_state.optimized_weights = {}
 if "risk_free_rate" not in st.session_state:
     st.session_state.risk_free_rate = 4.5
-if "optimization_objective" not in st.session_state:
-    st.session_state.optimization_objective = "Maximize Sharpe Ratio"
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # ASSET DATA
@@ -63,284 +64,243 @@ ASSET_DATA = {
 
 st.markdown("""
     <div style='text-align: center; margin-bottom: 2rem;'>
-        <h1 style='color: #003366; font-size: 2.5rem; border: none;'>📊 Optimization Results</h1>
-        <p style='color: #003366; font-size: 1.1rem;'>Your Optimized Portfolio</p>
+        <h1 style='color: #003366; font-size: 2.5rem; border: none;'>🚀 Run Optimization</h1>
+        <p style='color: #003366; font-size: 1.1rem;'>Execute portfolio optimization</p>
     </div>
     """, unsafe_allow_html=True)
 
-# Check if optimization has been run
-if not st.session_state.optimized_weights or not st.session_state.selected_assets:
-    st.error("⚠️ No optimization results! Please run optimization first.")
+# Check if assets are selected
+if not st.session_state.selected_assets:
+    st.error("⚠️ No assets selected! Please go back and select assets first.")
     st.stop()
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# CALCULATE METRICS
+# OPTIMIZATION EXECUTION
 # ═══════════════════════════════════════════════════════════════════════════════
 
-selected_assets_list = list(st.session_state.selected_assets.keys())
-current_weights = st.session_state.selected_assets
-optimized_weights = st.session_state.optimized_weights
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>⚙️ OPTIMIZATION PARAMETERS</h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-# Current portfolio metrics
-current_return = sum(current_weights[asset] * ASSET_DATA[asset]["return"] 
-                     for asset in selected_assets_list if asset in ASSET_DATA)
-current_vol = np.sqrt(sum((current_weights[asset] ** 2) * (ASSET_DATA[asset]["volatility"] ** 2) 
-                           for asset in selected_assets_list if asset in ASSET_DATA))
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("📊 Objective", st.session_state.optimization_objective)
+
+with col2:
+    st.metric("🎯 Assets", len(st.session_state.selected_assets))
+
+with col3:
+    st.metric("💰 Risk-Free Rate", f"{st.session_state.risk_free_rate:.2f}%")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# OPTIMIZATION LOGIC
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🔄 RUNNING OPTIMIZATION...</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Run optimization based on objective
+selected_assets_list = list(st.session_state.selected_assets.keys())
+current_weights = list(st.session_state.selected_assets.values())
+
+# Calculate metrics for current portfolio
+current_return = sum(current_weights[i] * ASSET_DATA[asset]["return"] 
+                     for i, asset in enumerate(selected_assets_list) if asset in ASSET_DATA)
+current_vol = np.sqrt(sum((current_weights[i] ** 2) * (ASSET_DATA[asset]["volatility"] ** 2) 
+                           for i, asset in enumerate(selected_assets_list) if asset in ASSET_DATA))
 current_sharpe = (current_return - st.session_state.risk_free_rate) / current_vol if current_vol > 0 else 0
 
-# Optimized portfolio metrics
+# Optimization
+if st.session_state.optimization_objective == "Maximize Sharpe Ratio":
+    # Allocate more to high sharpe ratio assets
+    sharpe_ratios = {}
+    for asset in selected_assets_list:
+        if asset in ASSET_DATA:
+            sharpe = (ASSET_DATA[asset]["return"] - st.session_state.risk_free_rate) / ASSET_DATA[asset]["volatility"]
+            sharpe_ratios[asset] = max(sharpe, 0)
+    
+    total_sharpe = sum(sharpe_ratios.values())
+    if total_sharpe > 0:
+        optimized_weights = {asset: sharpe_ratios[asset] / total_sharpe for asset in selected_assets_list}
+    else:
+        optimized_weights = {asset: 1.0 / len(selected_assets_list) for asset in selected_assets_list}
+
+elif st.session_state.optimization_objective == "Minimize Risk":
+    # Allocate inversely to volatility
+    inv_vols = {}
+    for asset in selected_assets_list:
+        if asset in ASSET_DATA:
+            inv_vols[asset] = 1.0 / ASSET_DATA[asset]["volatility"]
+    
+    total_inv_vol = sum(inv_vols.values())
+    optimized_weights = {asset: inv_vols[asset] / total_inv_vol for asset in selected_assets_list}
+
+elif st.session_state.optimization_objective == "Maximize Return":
+    # Allocate 100% to highest return asset
+    max_asset = max(selected_assets_list, 
+                    key=lambda x: ASSET_DATA[x]["return"] if x in ASSET_DATA else 0)
+    optimized_weights = {asset: (1.0 if asset == max_asset else 0.0) for asset in selected_assets_list}
+
+else:  # Equal Weight
+    optimized_weights = {asset: 1.0 / len(selected_assets_list) for asset in selected_assets_list}
+
+# Calculate optimized metrics
 opt_return = sum(optimized_weights[asset] * ASSET_DATA[asset]["return"] 
                  for asset in selected_assets_list if asset in ASSET_DATA)
 opt_vol = np.sqrt(sum((optimized_weights[asset] ** 2) * (ASSET_DATA[asset]["volatility"] ** 2) 
                        for asset in selected_assets_list if asset in ASSET_DATA))
 opt_sharpe = (opt_return - st.session_state.risk_free_rate) / opt_vol if opt_vol > 0 else 0
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# RESULTS COMPARISON
-# ═══════════════════════════════════════════════════════════════════════════════
+st.session_state.optimized_weights = optimized_weights
 
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📊 RESULTS COMPARISON</h2>
-        <p style='color: white;'>Current vs Optimized Portfolio</p>
-    </div>
-    """, unsafe_allow_html=True)
+# Display success message
+st.success("""
+✅ **Optimization Complete!**
 
-# Create two columns: Current vs Optimized
-col_current, col_arrow, col_optimized = st.columns([2, 0.5, 2])
-
-# CURRENT PORTFOLIO
-with col_current:
-    st.markdown("""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
-            <h3 style='color: #FFD700; margin-top: 0;'>📈 CURRENT PORTFOLIO</h3>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.metric("Expected Return", f"{current_return:.2f}%")
-    st.metric("Volatility (Risk)", f"{current_vol:.2f}%")
-    st.metric("Sharpe Ratio", f"{current_sharpe:.3f}")
-
-# ARROW
-with col_arrow:
-    st.markdown("")
-    st.markdown("")
-    st.markdown("")
-    st.markdown("")
-    st.markdown("""
-        <div style='text-align: center; margin-top: 2rem;'>
-            <h1 style='color: #FFD700; font-size: 2rem;'>→</h1>
-        </div>
-        """, unsafe_allow_html=True)
-
-# OPTIMIZED PORTFOLIO
-with col_optimized:
-    st.markdown("""
-        <div style='background-color: #1a7d4d; padding: 1.5rem; border-radius: 0.5rem;'>
-            <h3 style='color: #FFD700; margin-top: 0;'>🚀 OPTIMIZED PORTFOLIO</h3>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.metric("Expected Return", f"{opt_return:.2f}%", f"{opt_return - current_return:+.2f}%")
-    st.metric("Volatility (Risk)", f"{opt_vol:.2f}%", f"{opt_vol - current_vol:+.2f}%")
-    st.metric("Sharpe Ratio", f"{opt_sharpe:.3f}", f"{opt_sharpe - current_sharpe:+.3f}")
-
-# Optimization Objective
-st.markdown("")
-st.markdown(f"""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
-        <h3 style='color: #FFD700; margin-top: 0;'>🎯 Optimization Objective</h3>
-        <p style='color: white; font-size: 1.1rem;'><strong>{st.session_state.optimization_objective}</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# OPTIMIZED WEIGHTS TABLE
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>💼 OPTIMIZED ALLOCATION</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-weights_data = []
-for asset in selected_assets_list:
-    current_w = current_weights.get(asset, 0)
-    opt_w = optimized_weights.get(asset, 0)
-    change = opt_w - current_w
-    
-    weights_data.append({
-        "Asset": asset,
-        "Current Weight": f"{current_w*100:.1f}%",
-        "Optimized Weight": f"{opt_w*100:.1f}%",
-        "Change": f"{change*100:+.1f}%"
-    })
-
-df_weights = pd.DataFrame(weights_data)
-st.dataframe(
-    df_weights,
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "Asset": st.column_config.TextColumn("Asset", width="small"),
-        "Current Weight": st.column_config.TextColumn("Current", width="small"),
-        "Optimized Weight": st.column_config.TextColumn("Optimized", width="small"),
-        "Change": st.column_config.TextColumn("Change", width="small")
-    }
-)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# PERFORMANCE METRICS - DETAILED TABLE
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📈 DETAILED PERFORMANCE METRICS</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Calculate improvements
-improvement_return_pct = ((opt_return - current_return) / current_return * 100) if current_return != 0 else 0
-improvement_sharpe_pct = ((opt_sharpe - current_sharpe) / current_sharpe * 100) if current_sharpe != 0 else 0
-improvement_vol_pct = ((opt_vol - current_vol) / current_vol * 100) if current_vol != 0 else 0
-
-metrics_data = {
-    "Performance Metric": [
-        "Expected Annual Return",
-        "Portfolio Volatility",
-        "Sharpe Ratio",
-        "Risk-Free Rate",
-        "Excess Return (Rf adjusted)"
-    ],
-    "Current": [
-        f"{current_return:.2f}%",
-        f"{current_vol:.2f}%",
-        f"{current_sharpe:.4f}",
-        f"{st.session_state.risk_free_rate:.2f}%",
-        f"{current_return - st.session_state.risk_free_rate:.2f}%"
-    ],
-    "Optimized": [
-        f"{opt_return:.2f}%",
-        f"{opt_vol:.2f}%",
-        f"{opt_sharpe:.4f}",
-        f"{st.session_state.risk_free_rate:.2f}%",
-        f"{opt_return - st.session_state.risk_free_rate:.2f}%"
-    ],
-    "Change": [
-        f"{opt_return - current_return:+.2f}%",
-        f"{opt_vol - current_vol:+.2f}%",
-        f"{opt_sharpe - current_sharpe:+.4f}",
-        "0.00%",
-        f"{(opt_return - st.session_state.risk_free_rate) - (current_return - st.session_state.risk_free_rate):+.2f}%"
-    ],
-    "% Improvement": [
-        f"{improvement_return_pct:+.2f}%",
-        f"{improvement_vol_pct:+.2f}%",
-        f"{improvement_sharpe_pct:+.2f}%",
-        "-",
-        f"{improvement_return_pct:+.2f}%"
-    ]
-}
-
-df_metrics = pd.DataFrame(metrics_data)
-st.dataframe(
-    df_metrics,
-    use_container_width=True,
-    hide_index=True,
-    column_config={
-        "Performance Metric": st.column_config.TextColumn("Metric", width="medium"),
-        "Current": st.column_config.TextColumn("Current", width="small"),
-        "Optimized": st.column_config.TextColumn("Optimized", width="small"),
-        "Change": st.column_config.TextColumn("Change", width="small"),
-        "% Improvement": st.column_config.TextColumn("% Change", width="small")
-    }
-)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# IMPROVEMENT SUMMARY
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>✨ OPTIMIZATION SUMMARY</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Improvement metrics
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    return_improvement = opt_return - current_return
-    if return_improvement > 0:
-        color = "🟢"
-        direction = "INCREASED"
-    else:
-        color = "🔴"
-        direction = "DECREASED"
-    
-    st.markdown(f"""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-            <p style='color: white; margin: 0;'>{color} Return {direction}</p>
-            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_return_pct:+.2f}%</h2>
-            <p style='color: #90EE90; margin: 0;'>{return_improvement:+.2f}% absolute</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-with col2:
-    vol_improvement = opt_vol - current_vol
-    if vol_improvement < 0:
-        color = "🟢"
-        direction = "REDUCED"
-    else:
-        color = "🔴"
-        direction = "INCREASED"
-    
-    st.markdown(f"""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-            <p style='color: white; margin: 0;'>{color} Risk {direction}</p>
-            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_vol_pct:+.2f}%</h2>
-            <p style='color: #90EE90; margin: 0;'>{vol_improvement:+.2f}% absolute</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-with col3:
-    sharpe_improvement = opt_sharpe - current_sharpe
-    if sharpe_improvement > 0:
-        color = "🟢"
-        direction = "IMPROVED"
-    else:
-        color = "🔴"
-        direction = "DECLINED"
-    
-    st.markdown(f"""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-            <p style='color: white; margin: 0;'>{color} Sharpe Ratio {direction}</p>
-            <h2 style='color: #FFD700; margin: 0.5rem 0;'>{improvement_sharpe_pct:+.2f}%</h2>
-            <p style='color: #90EE90; margin: 0;'>{sharpe_improvement:+.4f} absolute</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# RECOMMENDATIONS
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>💡 RECOMMENDATIONS</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.info("""
-📌 **Summary:**
-- Your optimized portfolio achieves better risk-adjusted returns
-- Allocate based on your risk tolerance and investment horizon
-- Review quarterly and rebalance as needed
-- Consider implementation costs and tax implications
+Optimization has been executed successfully using your selected objective.
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# EXPORT & FURTHER ANALYSIS
+# IMPROVEMENT METRICS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>📈 OPTIMIZATION RESULTS</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+improvement_return = ((opt_return - current_return) / current_return * 100) if current_return != 0 else 0
+improvement_sharpe = ((opt_sharpe - current_sharpe) / current_sharpe * 100) if current_sharpe != 0 else 0
+
+with col1:
+    st.metric(
+        "Return Improvement",
+        f"{improvement_return:+.2f}%",
+        delta=f"{opt_return - current_return:.2f}%"
+    )
+
+with col2:
+    st.metric(
+        "Volatility Change",
+        f"{opt_vol:.2f}%",
+        delta=f"{opt_vol - current_vol:.2f}%"
+    )
+
+with col3:
+    st.metric(
+        "Sharpe Improvement",
+        f"{improvement_sharpe:+.2f}%",
+        delta=f"{opt_sharpe - current_sharpe:.3f}"
+    )
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EFFICIENT FRONTIER VISUALIZATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>📊 EFFICIENT FRONTIER</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Generate efficient frontier by simulating random portfolios
+np.random.seed(42)
+num_simulations = 5000
+selected_assets_list = list(st.session_state.selected_assets.keys())
+num_assets = len(selected_assets_list)
+
+# Store simulation results
+frontier_returns = []
+frontier_vols = []
+frontier_sharpes = []
+
+for _ in range(num_simulations):
+    # Random weights
+    weights = np.random.random(num_assets)
+    weights /= np.sum(weights)
+    
+    # Calculate portfolio metrics
+    port_return = sum(weights[i] * ASSET_DATA[selected_assets_list[i]]["return"] 
+                      for i in range(num_assets) if selected_assets_list[i] in ASSET_DATA)
+    port_vol = np.sqrt(sum((weights[i] ** 2) * (ASSET_DATA[selected_assets_list[i]]["volatility"] ** 2) 
+                            for i in range(num_assets) if selected_assets_list[i] in ASSET_DATA))
+    port_sharpe = (port_return - st.session_state.risk_free_rate) / port_vol if port_vol > 0 else 0
+    
+    frontier_returns.append(port_return)
+    frontier_vols.append(port_vol)
+    frontier_sharpes.append(port_sharpe)
+
+# Create Efficient Frontier plot
+fig, ax = plt.subplots(figsize=(12, 7))
+
+# Plot all simulated portfolios
+scatter = ax.scatter(frontier_vols, frontier_returns, c=frontier_sharpes, 
+                     cmap='viridis', alpha=0.5, s=30, label='Simulated Portfolios')
+
+# Plot current portfolio
+ax.scatter(current_vol, current_return, color='orange', s=200, marker='o', 
+          edgecolors='black', linewidth=2, label='Current Portfolio', zorder=5)
+
+# Plot optimized portfolio
+ax.scatter(opt_vol, opt_return, color='lime', s=200, marker='*', 
+          edgecolors='black', linewidth=2, label='Optimized Portfolio', zorder=5)
+
+# Plot Capital Allocation Line (CAL)
+max_vol_for_cal = max(frontier_vols) * 1.2
+cal_vols = np.linspace(0, max_vol_for_cal, 100)
+risk_free_rate = st.session_state.risk_free_rate
+
+if opt_sharpe > 0:
+    cal_returns = risk_free_rate + opt_sharpe * cal_vols
+    ax.plot(cal_vols, cal_returns, 'r--', linewidth=2, label='Capital Allocation Line', zorder=4)
+
+# Risk-free rate point
+ax.scatter(0, risk_free_rate, color='red', s=150, marker='D', 
+          edgecolors='black', linewidth=2, label='Risk-Free Rate', zorder=5)
+
+# Formatting
+ax.set_xlabel('Portfolio Volatility (Risk) %', fontsize=12, fontweight='bold')
+ax.set_ylabel('Expected Return %', fontsize=12, fontweight='bold')
+ax.set_title('Efficient Frontier - Portfolio Optimization', fontsize=14, fontweight='bold', color='#003366')
+ax.legend(loc='upper left', fontsize=10)
+ax.grid(True, alpha=0.3)
+ax.set_facecolor('#f8f9fa')
+fig.patch.set_facecolor('white')
+
+# Add colorbar
+cbar = plt.colorbar(scatter, ax=ax)
+cbar.set_label('Sharpe Ratio', fontweight='bold')
+
+st.pyplot(fig)
+
+# Add explanation
+st.markdown("""
+**Efficient Frontier Explanation:**
+
+- **Orange Circle (●)** = Your current portfolio allocation
+- **Green Star (★)** = Your optimized portfolio (based on selected objective)
+- **Red Diamond (◆)** = Risk-free rate (4.5% with zero volatility)
+- **Colored Dots** = Other possible portfolio allocations (simulated)
+- **Red Dashed Line** = Capital Allocation Line (optimal risk-return trade-off)
+
+The optimized portfolio should be on or near the efficient frontier, representing the best risk-adjusted returns for your chosen objective.
+""")
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NEXT STEPS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# NEXT STEPS
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
@@ -349,86 +309,22 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
-    st.markdown("""
-    **Implement Your Portfolio:**
-    - Execute trades based on optimized weights
-    - Monitor performance regularly
-    - Rebalance when weights drift
-    """)
+    if st.button("← Back to Objective", key="optimize_to_objective", use_container_width=True):
+        st.switch_page("pages/4_Objective.py")
 
 with col2:
     st.markdown("""
-    **Further Analysis:**
-    - Run sensitivity analysis
-    - Perform stress testing
-    - Compare with benchmarks
-    """)
-
-st.success("""
-✅ **Optimization Complete!**
-
-Thank you for using The Mountain Path Portfolio Optimizer. 
-Your optimized portfolio is ready for implementation.
-""")
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# NAVIGATION & ACTION BUTTONS
-# ═══════════════════════════════════════════════════════════════════════════════
-
-st.markdown("""
-    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>🔄 WHAT WOULD YOU LIKE TO DO?</h2>
-    </div>
-    """, unsafe_allow_html=True)
-
-# Top row: Back button and progress
-nav_row1_col1, nav_row1_col2, nav_row1_col3 = st.columns([1, 1, 1])
-
-with nav_row1_col1:
-    if st.button("← Back to Optimization", key="results_to_optimize", use_container_width=True):
-        st.switch_page("pages/5_Optimize.py")
-
-with nav_row1_col2:
-    st.markdown("""
         <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
-            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 6/6</p>
-            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Results</p>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 5/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Optimize</p>
         </div>
         """, unsafe_allow_html=True)
 
-with nav_row1_col3:
-    st.markdown("""
-        <div style='text-align: center; padding: 0.75rem; background-color: #1a7d4d; border-radius: 0.5rem;'>
-            <p style='color: #FFD700; font-weight: bold; margin: 0;'>✅ COMPLETE!</p>
-            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Optimization Done</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-# Action buttons row
-st.markdown("""
-    <div style='background-color: #003366; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0;'>
-        <p style='color: white; font-weight: bold; margin: 0;'>Adjust Your Results:</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-action_col1, action_col2, action_col3 = st.columns(3)
-
-with action_col1:
-    if st.button("⚙️ Adjust Weights", key="results_to_weights", use_container_width=True):
-        st.switch_page("pages/2_Weights.py")
-    st.caption("Go back to change asset weights")
-
-with action_col2:
-    if st.button("🎯 Review Objective", key="results_to_objective", use_container_width=True):
-        st.switch_page("pages/4_Objective.py")
-    st.caption("Try a different optimization goal")
-
-with action_col3:
-    if st.button("🏠 Start New Portfolio", key="results_to_app", use_container_width=True):
-        st.switch_page("app.py")
-    st.caption("Reset and select new assets")
+with col3:
+    if st.button("Next: Results →", key="optimize_to_results", use_container_width=True):
+        st.switch_page("pages/6_Results.py")
 
 render_footer()
