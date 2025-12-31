@@ -391,31 +391,23 @@ def apply_main_styles():
     """, unsafe_allow_html=True)
 
 def render_header(title: str = "🏔️ Portfolio Optimizer", method: str = None):
-    """Render professional header"""
-    if method:
-        st.markdown(f"""
-        <div style="background: linear-gradient(135deg, {COLORS['dark_blue']} 0%, {COLORS['dark_blue']} 100%); 
-                    color: {COLORS['text_light']}; padding: 8px 20px; margin: 0 0 20px 0; 
-                    border-bottom: 2px solid {COLORS['gold']}; display: flex; 
-                    align-items: center; justify-content: space-between;">
-            <div>
-                <div style="font-size: 16px; font-weight: bold; color: {COLORS['text_light']};">{title}</div>
-                <div style="font-size: 12px; color: {COLORS['light_blue']};">The Mountain Path - World of Finance</div>
-            </div>
-            <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid {COLORS['gold']}; 
-                        color: {COLORS['gold']}; padding: 4px 12px; border-radius: 4px; 
-                        font-size: 11px; font-weight: bold;">{method}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown(f"""
-        <div style="background: linear-gradient(135deg, {COLORS['dark_blue']} 0%, {COLORS['dark_blue']} 100%); 
-                    color: {COLORS['text_light']}; padding: 8px 20px; margin: 0 0 20px 0; 
-                    border-bottom: 2px solid {COLORS['gold']};">
-            <div style="font-size: 16px; font-weight: bold; color: {COLORS['text_light']};">{title}</div>
-            <div style="font-size: 12px; color: {COLORS['light_blue']};">The Mountain Path - World of Finance</div>
-        </div>
-        """, unsafe_allow_html=True)
+    """Render professional centered header with no duplication"""
+    st.markdown(f"""
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <h1 style="color: {COLORS['dark_blue']}; font-size: 3.5rem; font-weight: bold; margin: 0.5rem 0; letter-spacing: -0.02em;">
+            🏔️ Portfolio Optimizer
+        </h1>
+        <p style="color: {COLORS['gold']}; font-size: 1.1rem; font-weight: 600; margin: 0.5rem 0 1.5rem 0;">
+            The Mountain Path - World of Finance
+        </p>
+        <p style="color: {COLORS['dark_blue']}; font-size: 1.2rem; font-weight: 500; margin: 0.8rem 0;">
+            Advanced Multi-Asset Portfolio Optimization
+        </p>
+        <p style="color: {COLORS['light_blue']}; font-size: 1rem; font-weight: 500; margin: 0.5rem 0;">
+            <strong style="color: {COLORS['gold']};">Dynamic Portfolio Allocation using Real-time US Market Data</strong>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 def render_footer():
     """Render professional footer"""
