@@ -226,10 +226,17 @@ def apply_main_styles():
         color: {COLORS['text_light']};
     }}
     
-    .stTextInput input, .stNumberInput input, .stSelectbox select {{
+    .stTextInput input, .stSelectbox select {{
         background: rgba(255, 255, 255, 0.1);
         color: {COLORS['text_light']};
         border: 1px solid {COLORS['light_blue']};
+    }}
+    
+    .stNumberInput input {{
+        background: rgba(255, 255, 255, 0.1);
+        color: #8B0000 !important;
+        border: 1px solid {COLORS['light_blue']};
+        font-weight: bold;
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
