@@ -178,15 +178,6 @@ for asset, weight in weights.items():
 
 df_weights = pd.DataFrame(weights_data)
 
-# Add total row
-total_row = {
-    "Asset": "TOTAL",
-    "Weight %": f"{sum(w['Weight'].strip('%') for w in [{"Weight": f"{weights[asset]*100:.2f}%"} for asset in weights]) / len(weights) * len(weights):.2f}%",
-    "Amount ($1000)": f"${sum(w*1000 for w in weights.values()):.2f}",
-    "Amount ($10K)": f"${sum(w*10000 for w in weights.values()):.2f}",
-    "Amount ($100K)": f"${sum(w*100000 for w in weights.values()):.2f}"
-}
-
 st.dataframe(
     df_weights,
     use_container_width=True,
