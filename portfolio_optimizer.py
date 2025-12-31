@@ -1,3 +1,4 @@
+
 """
 Multi-Asset Portfolio Optimization Streamlit Application
 Main app file with data fetching, optimization, and portfolio calculations
@@ -67,9 +68,23 @@ def fetch_asset_data(tickers: list, days: int) -> pd.DataFrame:
         
         # Handle single ticker case
         if isinstance(data.columns, pd.MultiIndex):
-            data = data['Adj Close']
+            # Try 'Adj Close' first, fallback to 'Close'
+            if 'Adj Close' in data.columns.get_level_values(0):
+                data = data['Adj Close']
+            elif 'Close' in data.columns.get_level_values(0):
+                data = data['Close']
+            else:
+                st.error("Error: No price data found in Yahoo Finance response")
+                return None
         else:
-            data = data[['Adj Close']] if 'Adj Close' in data.columns else data
+            # For single ticker, try Adj Close first, then Close
+            if 'Adj Close' in data.columns:
+                data = data[['Adj Close']]
+            elif 'Close' in data.columns:
+                data = data[['Close']]
+            else:
+                st.error("Error: No price data found in Yahoo Finance response")
+                return None
         
         # Remove any NaN values
         data = data.dropna()
@@ -77,7 +92,7 @@ def fetch_asset_data(tickers: list, days: int) -> pd.DataFrame:
         return data
     
     except Exception as e:
-        st.error(f"Error fetching data: {str(e)}")
+        st.error(f"Error fetching data: {str(e)}, closing prices will work in yahoo finance")
         return None
 
 
