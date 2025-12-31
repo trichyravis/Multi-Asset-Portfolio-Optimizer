@@ -83,12 +83,22 @@ def apply_custom_styles():
     }}
     
     /* ====================================================================
-       TEXT STYLING
+       TEXT STYLING - EXPLICIT WHITE FOR ALL TEXT
        ==================================================================== */
     
+    /* All paragraphs, spans, divs - explicit white */
     p, span, div {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
+    }}
+    
+    /* Markdown containers - explicit white */
+    [data-testid="stMarkdownContainer"] {{
+        color: #FFFFFF !important;
+    }}
+    
+    [data-testid="stMarkdownContainer"] * {{
+        color: #FFFFFF !important;
     }}
     
     .element-container {{
