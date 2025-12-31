@@ -187,10 +187,17 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
+st.markdown("")
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🔄 NAVIGATION</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
-    if st.button("← Back to Analysis", key="objective_to_analysis", use_container_width=True):
+    if st.button("← Back to Analysis", key="objective_to_analysis", use_container_width=True, help="Go back to Analysis"):
         st.switch_page("pages/3_Analysis.py")
 
 with col2:
@@ -202,7 +209,7 @@ with col2:
         """, unsafe_allow_html=True)
 
 with col3:
-    if st.button("Next: Optimize →", key="objective_to_optimize", use_container_width=True):
+    if st.button("Next: Optimize →", key="objective_to_optimize", use_container_width=True, help="Go to Optimize page"):
         st.switch_page("pages/5_Optimize.py")
 
 render_footer()
