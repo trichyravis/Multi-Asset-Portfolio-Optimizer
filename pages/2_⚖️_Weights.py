@@ -181,18 +181,11 @@ else:
     Your portfolio allocation is ready for analysis.
     """)
     
-    # Navigation button
+    # Navigation info
     st.markdown("")
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.info("""
-        📊 **Next Step:** Go to **Analysis** page to view your current portfolio metrics.
-        """)
-    
-    with col2:
-        if st.button("▶️ Go to Analysis Page", key="go_to_analysis", use_container_width=True):
-            st.switch_page("pages/3_Analysis.py")
+    st.info("""
+    📊 **Next Step:** Go to sidebar → 📊 **Analysis** to view your current portfolio metrics.
+    """)
     
     # Next steps
     st.markdown("""
