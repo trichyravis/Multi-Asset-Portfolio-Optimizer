@@ -29,6 +29,14 @@ render_header()
 # INITIALIZE SESSION STATE
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# Initialize required state variables
+if "selected_assets" not in st.session_state:
+    st.session_state.selected_assets = {}
+if "asset_weights_adjusted" not in st.session_state:
+    st.session_state.asset_weights_adjusted = {}
+if "weights_validated" not in st.session_state:
+    st.session_state.weights_validated = False
+
 if "optimized_weights" not in st.session_state:
     st.session_state.optimized_weights = {}
 if "risk_free_rate" not in st.session_state:
