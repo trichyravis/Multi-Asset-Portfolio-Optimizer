@@ -127,9 +127,9 @@ def apply_custom_styles():
     
     /* Radio Buttons - HIGH CONTRAST */
     [data-testid="stRadio"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 500 !important;
+        font-weight: 700 !important;
         cursor: pointer !important;
         margin: 10px 0 !important;
         padding: 10px !important;
@@ -153,9 +153,9 @@ def apply_custom_styles():
     
     /* Checkboxes - HIGH CONTRAST */
     [data-testid="stCheckbox"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 500 !important;
+        font-weight: 700 !important;
         cursor: pointer !important;
         margin: 8px 0 !important;
         padding: 8px !important;
@@ -180,10 +180,20 @@ def apply_custom_styles():
     }}
     
     [data-testid="stSlider"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         margin-bottom: 10px !important;
+    }}
+    
+    /* Slider value display */
+    [data-testid="stSlider"] div[data-baseweb="slider"] {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* All text in sliders - WHITE */
+    [data-testid="stSlider"] * {{
+        color: #FFFFFF !important;
     }}
     
     [data-testid="stSlider"] [role="slider"] {{
@@ -200,7 +210,7 @@ def apply_custom_styles():
     /* Slider thumb */
     .stSlider > div > div > div > div > div {{
         background-color: {COLORS['gold']} !important;
-        border: 2px solid {COLORS['text_dark']} !important;
+        border: 2px solid #FFFFFF !important;
         height: 20px !important;
         width: 20px !important;
         border-radius: 50% !important;
@@ -209,9 +219,9 @@ def apply_custom_styles():
     
     /* Select Boxes / Dropdowns - HIGH CONTRAST */
     [data-testid="stSelectbox"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         margin-bottom: 8px !important;
     }}
     
@@ -231,9 +241,9 @@ def apply_custom_styles():
     
     /* Multiselect */
     [data-testid="stMultiSelect"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         margin-bottom: 8px !important;
     }}
     
@@ -243,9 +253,9 @@ def apply_custom_styles():
     
     /* Number Input - HIGH CONTRAST */
     [data-testid="stNumberInput"] label {{
-        color: {COLORS['text_dark']} !important;
+        color: #FFFFFF !important;
         font-size: {FONTS['body']}px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         margin-bottom: 8px !important;
     }}
     
@@ -256,6 +266,7 @@ def apply_custom_styles():
         border-radius: 6px !important;
         padding: 10px !important;
         font-size: {FONTS['body']}px !important;
+        font-weight: 600 !important;
     }}
     
     [data-testid="stNumberInput"] input:focus {{
@@ -265,8 +276,8 @@ def apply_custom_styles():
     
     /* Text Input - HIGH CONTRAST */
     [data-testid="stTextInput"] label {{
-        color: {COLORS['text_dark']} !important;
-        font-weight: 600 !important;
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
     }}
     
     [data-testid="stTextInput"] input {{
