@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - WORLD OF FINANCE
@@ -374,42 +375,81 @@ Your optimized portfolio is ready for implementation.
 """)
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ACTION BUTTONS
+# NAVIGATION & ACTION BUTTONS
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>🔄 NEXT ACTIONS</h2>
+        <h2 style='color: #FFD700; margin-top: 0;'>🔄 WHAT WOULD YOU LIKE TO DO?</h2>
     </div>
     """, unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns(3)
+# Top row: Back button and progress
+nav_row1_col1, nav_row1_col2, nav_row1_col3 = st.columns([1, 1, 1])
 
-with col1:
+with nav_row1_col1:
+    if st.button("← Back to Optimization", key="results_to_optimize", use_container_width=True):
+        st.switch_page("pages/5_Optimize.py")
+
+with nav_row1_col2:
     st.markdown("""
-    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-        <h3 style='color: #FFD700; margin-top: 0;'>⚙️ Change Weights</h3>
-        <p style='color: white;'>Adjust asset weights again</p>
-        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>Weights</strong></p>
+        <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 6/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Results</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with nav_row1_col3:
+    st.markdown("""
+        <div style='text-align: center; padding: 0.75rem; background-color: #1a7d4d; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>✅ COMPLETE!</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Optimization Done</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# Action buttons row - LARGE CLICKABLE CARDS
+st.markdown("""
+    <div style='background-color: #003366; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0;'>
+        <p style='color: white; font-weight: bold; margin: 0;'>💡 Adjust Your Results - Click Any Card:</p>
     </div>
     """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-        <h3 style='color: #FFD700; margin-top: 0;'>🎯 Change Objective</h3>
-        <p style='color: white;'>Try different optimization goal</p>
-        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>Objective</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
+action_col1, action_col2, action_col3 = st.columns(3)
 
-with col3:
+with action_col1:
     st.markdown("""
-    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center;'>
-        <h3 style='color: #FFD700; margin-top: 0;'>🏠 Start Over</h3>
-        <p style='color: white;'>Reset and select new assets</p>
-        <p style='color: #90EE90; font-size: 0.9rem;'>Go to sidebar → <strong>app</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+            <p style='font-size: 2rem; margin: 0;'>⚙️</p>
+            <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Change Weights</h3>
+            <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Adjust asset weights again</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    if st.button("Go to Weights Page", key="results_to_weights", use_container_width=True):
+        st.switch_page("pages/2_Weights.py")
+
+with action_col2:
+    st.markdown("""
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+            <p style='font-size: 2rem; margin: 0;'>🎯</p>
+            <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Change Objective</h3>
+            <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Try different optimization goal</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    if st.button("Go to Objective Page", key="results_to_objective", use_container_width=True):
+        st.switch_page("pages/4_Objective.py")
+
+with action_col3:
+    st.markdown("""
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+            <p style='font-size: 2rem; margin: 0;'>🏠</p>
+            <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Start Over</h3>
+            <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Reset and select new assets</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    if st.button("Go to App Page", key="results_to_app", use_container_width=True):
+        st.switch_page("app.py")
 
 render_footer()
