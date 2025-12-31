@@ -236,6 +236,45 @@ def apply_main_styles():
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
+       SLIDERS - DARK BLUE WITH WHITE TEXT
+       ═══════════════════════════════════════════════════════════════════════════════ */
+    
+    [data-testid="stSlider"] {{
+        background: {COLORS['dark_blue']};
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+    }}
+    
+    [data-testid="stSlider"] label {{
+        color: {COLORS['text_light']} !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+    }}
+    
+    [data-testid="stSlider"] > div > div > div {{
+        background: {COLORS['dark_blue']} !important;
+    }}
+    
+    /* Slider track */
+    .stSlider > div > div > div > div {{
+        background: rgba(255, 255, 255, 0.2) !important;
+    }}
+    
+    /* Slider thumb/handle */
+    .stSlider [role="slider"] {{
+        background: {COLORS['gold']} !important;
+        border: 2px solid {COLORS['gold']} !important;
+    }}
+    
+    /* Slider input value display */
+    [data-testid="stSlider"] input {{
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: {COLORS['text_light']} !important;
+        border: 1px solid {COLORS['gold']} !important;
+    }}
+    
+    /* ═══════════════════════════════════════════════════════════════════════════════
        HIDE STREAMLIT DEFAULTS
        ═══════════════════════════════════════════════════════════════════════════════ */
     
