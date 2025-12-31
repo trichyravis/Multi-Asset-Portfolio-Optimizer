@@ -1,8 +1,9 @@
+
 import streamlit as st
 import plotly.graph_objects as go
 from config_enhanced import PAGE_CONFIG, ASSET_STATS
 from styles_enhanced import apply_main_styles, render_header, render_footer
-from portfolio_analytics_enhanced import plot_efficient_frontier_3d, calculate_portfolio_metrics
+from portfolio_analytics_enhanced import plot_efficient_frontier_2d, calculate_portfolio_metrics
 
 st.set_page_config(**PAGE_CONFIG)
 apply_main_styles()
@@ -33,12 +34,12 @@ else:
         
         st.markdown("""
             <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;'>
-                <h3 style='color: #FFD700; margin-top: 0;'>📈 EFFICIENT FRONTIER 3D ANALYSIS</h3>
-                <p style='color: white;'>Interactive 3D visualization showing all possible portfolios and optimal position:</p>
+                <h3 style='color: #FFD700; margin-top: 0;'>📈 EFFICIENT FRONTIER ANALYSIS</h3>
+                <p style='color: white;'>2D visualization showing the relationship between risk (volatility) and expected return:</p>
             </div>
             """, unsafe_allow_html=True)
         
-        fig = plot_efficient_frontier_3d(selected_assets, initial_weights, optimized_weights)
+        fig = plot_efficient_frontier_2d(selected_assets, initial_weights, optimized_weights)
         st.plotly_chart(fig, use_container_width=True)
         
         st.markdown("")
