@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - MODEL ASSUMPTIONS & SETTINGS
@@ -13,30 +14,36 @@ st.set_page_config(**PAGE_CONFIG)
 apply_main_styles()
 render_header()
 
-st.markdown("""
-    <div style='text-align: center; margin-bottom: 2rem;'>
-        <h1 style='color: #003366; font-size: 2.5rem; border: none;'>⚙️ Model Assumptions</h1>
-        <p style='color: #003366; font-size: 1.1rem;'>Configure optimization parameters and view assumptions</p>
-    </div>
-    """, unsafe_allow_html=True)
-
 # Initialize session state if not already done
 if "risk_free_rate" not in st.session_state:
     st.session_state.risk_free_rate = 4.5
 if "investment_period" not in st.session_state:
     st.session_state.investment_period = 5
 
+st.markdown("""
+    <div style='text-align: center; margin-bottom: 2rem;'>
+        <h1 style='color: #003366; font-size: 2.5rem; border: none;'>⚙️ Model Assumptions</h1>
+        <p style='color: #003366; font-size: 1.1rem;'>Detailed configuration and educational information</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Important Notice
+st.info("""
+📌 **Note:** To adjust Risk-Free Rate and Investment Period, go to the **main app page**.  
+This page displays your current settings and provides detailed explanations.
+""")
+
 # Main assumptions section
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 2rem;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📊 PORTFOLIO OPTIMIZATION ASSUMPTIONS</h2>
-        <p style='color: white;'>Configure the key parameters for your portfolio analysis:</p>
+        <h2 style='color: #FFD700; margin-top: 0;'>📊 YOUR CURRENT SETTINGS</h2>
+        <p style='color: white;'>Current configuration (adjust on main app page):</p>
     </div>
     """, unsafe_allow_html=True)
 
 col1, col2 = st.columns(2)
 
-# Risk-Free Rate Setting
+# Risk-Free Rate Display (READ-ONLY)
 with col1:
     st.markdown("""
         <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
@@ -48,24 +55,15 @@ with col1:
         </div>
         """, unsafe_allow_html=True)
     
-    risk_free = st.slider(
-        "Risk-Free Rate (%)",
-        min_value=0.1,
-        max_value=10.0,
-        value=st.session_state.risk_free_rate,
-        step=0.1,
-        help="Current US Treasury 10-Year Rate typically ranges 1-5%"
-    )
-    st.session_state.risk_free_rate = risk_free
-    
     st.markdown(f"""
-        <div style='background-color: #1a5f7a; padding: 1rem; border-radius: 0.3rem; margin-top: 1rem;'>
-            <p style='color: #FFD700; margin: 0; font-size: 1.1rem; font-weight: bold;'>{risk_free:.2f}%</p>
-            <p style='color: white; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>Current Setting</p>
+        <div style='background-color: #1a5f7a; padding: 1.5rem; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; margin: 0; font-size: 0.9rem;'>Current Value</p>
+            <p style='color: white; font-size: 2rem; font-weight: bold; margin: 0.5rem 0 0 0;'>{st.session_state.risk_free_rate:.2f}%</p>
+            <p style='color: #90EE90; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>📌 To adjust: Go to main app page</p>
         </div>
         """, unsafe_allow_html=True)
 
-# Investment Period Setting
+# Investment Period Display (READ-ONLY)
 with col2:
     st.markdown("""
         <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 1rem;'>
@@ -77,20 +75,11 @@ with col2:
         </div>
         """, unsafe_allow_html=True)
     
-    period = st.slider(
-        "Investment Period (Years)",
-        min_value=1,
-        max_value=30,
-        value=st.session_state.investment_period,
-        step=1,
-        help="Longer periods allow for higher volatility tolerance"
-    )
-    st.session_state.investment_period = period
-    
     st.markdown(f"""
-        <div style='background-color: #1a5f7a; padding: 1rem; border-radius: 0.3rem; margin-top: 1rem;'>
-            <p style='color: #FFD700; margin: 0; font-size: 1.1rem; font-weight: bold;'>{period} Year(s)</p>
-            <p style='color: white; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>Current Setting</p>
+        <div style='background-color: #1a5f7a; padding: 1.5rem; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; margin: 0; font-size: 0.9rem;'>Current Value</p>
+            <p style='color: white; font-size: 2rem; font-weight: bold; margin: 0.5rem 0 0 0;'>{st.session_state.investment_period} Year(s)</p>
+            <p style='color: #90EE90; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>📌 To adjust: Go to main app page</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -104,7 +93,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Asset returns and volatility table
-asset_assumptions_html = """
+asset_assumptions_html = f"""
 <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem;'>
     <table style='width: 100%; border-collapse: collapse;'>
         <thead>
@@ -213,13 +202,13 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-assumptions_html = """
+assumptions_html = f"""
 <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
     <h4 style='color: #FFD700; margin-top: 0;'>Key Assumptions:</h4>
     <ul style='color: white; font-size: 0.95rem; line-height: 1.8;'>
         <li><strong>Historical Data:</strong> Asset returns and volatility based on historical performance</li>
-        <li><strong>Risk-Free Rate:</strong> Currently set to {:.2f}% (adjustable in this page)</li>
-        <li><strong>Investment Period:</strong> {:.0f} year(s) horizon (adjustable in this page)</li>
+        <li><strong>Risk-Free Rate:</strong> Currently set to {st.session_state.risk_free_rate:.2f}% (adjust on main app page)</li>
+        <li><strong>Investment Period:</strong> {st.session_state.investment_period} year(s) horizon (adjust on main app page)</li>
         <li><strong>Correlation:</strong> Simplified correlation model for volatility calculation</li>
         <li><strong>No Constraints:</strong> Assumes weights can range from 0-100% per asset</li>
         <li><strong>Rebalancing:</strong> Annual rebalancing to maintain target weights</li>
@@ -237,16 +226,16 @@ assumptions_html = """
         <li>For educational purposes - consult financial advisor before investing</li>
     </ul>
 </div>
-""".format(st.session_state.risk_free_rate, st.session_state.investment_period)
+"""
 
 st.markdown(assumptions_html, unsafe_allow_html=True)
 
-# Info box
+# Info box with instructions
 st.markdown("""
     <div style='background-color: #1a5f7a; padding: 1.5rem; border-radius: 0.5rem; margin-top: 2rem; border-left: 5px solid #FFD700;'>
         <p style='color: white; margin: 0;'>
-            💡 <strong>Tip:</strong> Adjust the Risk-Free Rate and Investment Period above to match your 
-            specific circumstances. These settings will be used throughout the portfolio optimization process.
+            💡 <strong>To adjust Risk-Free Rate and Investment Period:</strong> Go back to the main app page 
+            and use the sliders at the top. Your changes will be saved in the session and used for all calculations.
         </p>
     </div>
     """, unsafe_allow_html=True)
