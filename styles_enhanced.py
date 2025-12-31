@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - ENHANCED STYLES
@@ -9,36 +10,36 @@ import streamlit as st
 from config_enhanced import COLORS, TYPOGRAPHY
 
 def apply_main_styles():
-    """Apply all custom styles - dark blue background with white text"""
+    """Apply all custom styles - White background with dark blue content containers"""
     st.markdown(f"""
     <style>
     /* ═══════════════════════════════════════════════════════════════════════════════
-       MAIN BACKGROUND - DARK BLUE THEME
+       MAIN BACKGROUND - WHITE PAGE
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     .main {{
-        background: {COLORS['dark_blue']};
-        color: {COLORS['text_light']};
+        background: white;
+        color: #333333;
     }}
     
     .appview-container {{
-        background: {COLORS['dark_blue']};
-        color: {COLORS['text_light']};
+        background: white;
+        color: #333333;
     }}
     
     /* Full page background */
     body {{
-        background: {COLORS['dark_blue']} !important;
-        color: {COLORS['text_light']};
+        background: white !important;
+        color: #333333;
         font-family: {TYPOGRAPHY['font_secondary']};
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
-       HEADINGS - WHITE TEXT
+       HEADINGS - DARK BLUE TEXT ON WHITE
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     h1, h2, h3, h4, h5, h6 {{
-        color: {COLORS['text_light']};
+        color: {COLORS['dark_blue']};
         font-family: {TYPOGRAPHY['font_main']};
     }}
     
@@ -47,25 +48,25 @@ def apply_main_styles():
         font-weight: bold;
         border-bottom: 2px solid {COLORS['gold']};
         padding-bottom: 10px;
-        color: {COLORS['text_light']};
+        color: {COLORS['dark_blue']};
     }}
     
     h2 {{
         font-size: {TYPOGRAPHY['h2_size']};
-        color: {COLORS['text_light']};
+        color: {COLORS['dark_blue']};
     }}
     
     h3 {{
         font-size: {TYPOGRAPHY['h3_size']};
-        color: {COLORS['text_light']};
+        color: {COLORS['dark_blue']};
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
-       TEXT & PARAGRAPHS
+       TEXT & PARAGRAPHS - DARK TEXT
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     p {{
-        color: {COLORS['text_light']};
+        color: #333333;
         line-height: 1.6;
     }}
     
@@ -84,19 +85,19 @@ def apply_main_styles():
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
-       SIDEBAR - DARK BLUE
+       SIDEBAR - LIGHT GRAY
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     [data-testid="stSidebar"] {{
-        background: {COLORS['dark_blue']};
+        background: #f5f5f5;
     }}
     
     [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {{
-        color: {COLORS['text_light']};
+        color: #333333;
     }}
     
     /* ═══════════════════════════════════════════════════════════════════════════════
-       BUTTONS - SIMPLE DARK BLUE WITH WHITE TEXT
+       BUTTONS - DARK BLUE WITH WHITE TEXT
        ═══════════════════════════════════════════════════════════════════════════════ */
     
     .stButton > button {{
