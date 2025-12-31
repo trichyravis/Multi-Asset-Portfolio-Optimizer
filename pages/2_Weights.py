@@ -79,11 +79,22 @@ st.markdown(f"""
     </div>
     """, unsafe_allow_html=True)
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# MANUAL WEIGHT ADJUSTMENT (Percentage Input)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>⚙️ ADJUST PORTFOLIO WEIGHTS</h2>
+        <p style='color: #90EE90; margin: 0.5rem 0 0 0;'>Enter the percentage allocation for each asset (must total 100%)</p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # Initialize weights in session state if not already done
 if "asset_weights_adjusted" not in st.session_state or len(st.session_state.asset_weights_adjusted) == 0:
     st.session_state.asset_weights_adjusted = {asset: value for asset, value in st.session_state.selected_assets.items()}
 
-# Create sliders for each asset in 2 columns
+# Create input fields for each asset in 2 columns
 weights = {}
 cols = st.columns(2)
 
@@ -94,13 +105,15 @@ for idx, asset in enumerate(selected_assets_list):
         # Get current weight
         current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
         
-        weight_pct = st.slider(
-            f"📊 {asset}",
+        # Create a nice input field with validation
+        weight_pct = st.number_input(
+            f"📊 {asset} (%)",
             min_value=0.0,
             max_value=100.0,
-            value=current_weight * 100,
+            value=round(current_weight * 100, 2),
             step=0.1,
-            key=f"slider_{asset}"
+            key=f"input_{asset}",
+            help=f"Enter percentage allocation for {asset}"
         )
         weights[asset] = weight_pct / 100.0
 
@@ -113,62 +126,106 @@ total_pct = total_weight * 100
 
 st.markdown("")
 
-# Display metrics
-col1, col2, col3 = st.columns(3)
+# Display validation status
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.metric("📈 Total Weight", f"{total_pct:.1f}%")
+    st.metric("📊 Total Weight", f"{total_pct:.2f}%", delta=f"{total_pct - 100:.2f}%" if total_pct != 100 else None)
 
 with col2:
     if abs(total_pct - 100) < 0.01:
         st.success("✅ Valid (100%)")
+    elif total_pct < 100:
+        st.warning(f"⚠️ Under ({total_pct:.2f}%)")
     else:
-        st.error(f"❌ Invalid ({total_pct:.1f}%)")
+        st.error(f"❌ Over ({total_pct:.2f}%)")
 
 with col3:
-    if st.button("🔄 Reset to Equal"):
+    if st.button("🔄 Reset to Equal", help="Reset all weights to equal distribution", use_container_width=True):
         equal_weight = 1.0 / num_assets
         for asset in selected_assets_list:
             st.session_state.asset_weights_adjusted[asset] = equal_weight
         st.rerun()
 
+with col4:
+    if st.button("📋 Auto-Normalize", help="Automatically adjust to 100%", use_container_width=True):
+        if total_weight > 0:
+            for asset in selected_assets_list:
+                weights[asset] = weights[asset] / total_weight
+                st.session_state.asset_weights_adjusted[asset] = weights[asset]
+        st.rerun()
+
 # ═══════════════════════════════════════════════════════════════════════════════
-# WEIGHTS TABLE
+# WEIGHTS SUMMARY TABLE
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📋 WEIGHT SUMMARY</h2>
+        <h2 style='color: #FFD700; margin-top: 0;'>📋 WEIGHT SUMMARY & ALLOCATION</h2>
     </div>
     """, unsafe_allow_html=True)
 
-# Create dataframe for weights
+# Create detailed dataframe for weights
 weights_data = []
 for asset, weight in weights.items():
     weights_data.append({
         "Asset": asset,
-        "Weight": f"{weight*100:.1f}%",
-        "Amount (if $1000)": f"${weight*1000:.2f}"
+        "Weight %": f"{weight*100:.2f}%",
+        "Amount ($1000)": f"${weight*1000:.2f}",
+        "Amount ($10K)": f"${weight*10000:.2f}",
+        "Amount ($100K)": f"${weight*100000:.2f}"
     })
 
 df_weights = pd.DataFrame(weights_data)
+
+# Add total row
+total_row = {
+    "Asset": "TOTAL",
+    "Weight %": f"{sum(w['Weight'].strip('%') for w in [{"Weight": f"{weights[asset]*100:.2f}%"} for asset in weights]) / len(weights) * len(weights):.2f}%",
+    "Amount ($1000)": f"${sum(w*1000 for w in weights.values()):.2f}",
+    "Amount ($10K)": f"${sum(w*10000 for w in weights.values()):.2f}",
+    "Amount ($100K)": f"${sum(w*100000 for w in weights.values()):.2f}"
+}
+
 st.dataframe(
     df_weights,
     use_container_width=True,
     hide_index=True,
     column_config={
-        "Asset": st.column_config.TextColumn("Asset", width="medium"),
-        "Weight": st.column_config.TextColumn("Weight", width="medium"),
-        "Amount (if $1000)": st.column_config.TextColumn("Amount", width="medium")
+        "Asset": st.column_config.TextColumn("Asset", width="small"),
+        "Weight %": st.column_config.TextColumn("Weight %", width="small"),
+        "Amount ($1000)": st.column_config.TextColumn("If $1,000", width="small"),
+        "Amount ($10K)": st.column_config.TextColumn("If $10,000", width="small"),
+        "Amount ($100K)": st.column_config.TextColumn("If $100,000", width="small")
     }
 )
+
+# Show total in a nice box
+st.markdown(f"""
+    <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem; text-align: center; border: 2px solid #FFD700;'>
+        <p style='color: white; margin: 0;'>Total Allocation</p>
+        <h2 style='color: #FFD700; margin: 0.5rem 0;'>{total_pct:.2f}%</h2>
+        <p style='color: #90EE90; margin: 0;'>{"✅ Perfect! Ready for analysis" if abs(total_pct - 100) < 0.01 else "⚠️ Please adjust to 100%"}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # SAVE & VALIDATE
 # ═══════════════════════════════════════════════════════════════════════════════
 
+st.markdown("")
+
 if total_pct < 99.9 or total_pct > 100.1:
-    st.warning(f"⚠️ Weights don't sum to 100% (currently {total_pct:.1f}%). Please adjust!")
+    st.warning(f"""
+    ⚠️ **Weights must total 100%**
+    
+    Current total: **{total_pct:.2f}%**
+    
+    **Options:**
+    1. Manually adjust the percentages above
+    2. Click "Auto-Normalize" button to automatically adjust to 100%
+    3. Click "Reset to Equal" to start over with equal weights
+    """)
 else:
     # Update session state
     st.session_state.selected_assets = weights
@@ -176,10 +233,17 @@ else:
     
     st.markdown("")
     st.success(f"""
-    ✅ **Weights Saved!** Total = {total_pct:.1f}%
+    ✅ **Weights Saved Successfully!**
     
-    Your portfolio allocation is ready for analysis.
+    Total Allocation: **{total_pct:.2f}%**
+    
+    Your portfolio weights are ready for analysis!
     """)
+    
+    # Show quick summary
+    st.info("💡 **Portfolio Summary:**")
+    for asset, weight in weights.items():
+        st.write(f"• **{asset}**: {weight*100:.2f}%")
     
     # Navigation buttons with breadcrumb
     st.markdown("")
