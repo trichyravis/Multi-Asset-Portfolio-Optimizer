@@ -391,20 +391,20 @@ def apply_main_styles():
     """, unsafe_allow_html=True)
 
 def render_header(title: str = "🏔️ Portfolio Optimizer", method: str = None):
-    """Render professional centered header with compact spacing"""
+    """Render professional centered header - COMPACT (50% space reduction)"""
     st.markdown(f"""
-    <div style="text-align: center; margin-bottom: 1.5rem;">
-        <h1 style="color: {COLORS['dark_blue']}; font-size: 3.5rem; font-weight: bold; margin: 0.3rem 0; letter-spacing: -0.02em;">
+    <div style="text-align: center; margin-bottom: 0.8rem;">
+        <h1 style="color: {COLORS['dark_blue']}; font-size: 2.2rem; font-weight: bold; margin: 0.1rem 0; letter-spacing: -0.02em;">
             🏔️ Portfolio Optimizer
         </h1>
-        <div style="height: 2px; background: linear-gradient(90deg, transparent, {COLORS['gold']}, transparent); margin: 0.6rem 0 0.9rem 0;"></div>
-        <p style="color: {COLORS['dark_blue']}; font-size: 3.5rem; font-weight: bold; margin: 0 0 0.9rem 0; letter-spacing: -0.02em;">
+        <div style="height: 1px; background: linear-gradient(90deg, transparent, {COLORS['gold']}, transparent); margin: 0.3rem 0 0.5rem 0;"></div>
+        <p style="color: {COLORS['dark_blue']}; font-size: 1.8rem; font-weight: bold; margin: 0 0 0.4rem 0; letter-spacing: -0.02em;">
             The Mountain Path - World of Finance
         </p>
-        <p style="color: {COLORS['dark_blue']}; font-size: 1.2rem; font-weight: 500; margin: 0.5rem 0;">
+        <p style="color: {COLORS['dark_blue']}; font-size: 0.9rem; font-weight: 500; margin: 0.2rem 0;">
             Advanced Multi-Asset Portfolio Optimization
         </p>
-        <p style="color: {COLORS['light_blue']}; font-size: 1rem; font-weight: 500; margin: 0.3rem 0;">
+        <p style="color: {COLORS['light_blue']}; font-size: 0.8rem; font-weight: 500; margin: 0.15rem 0;">
             <strong style="color: {COLORS['gold']};">Dynamic Portfolio Allocation using Real-time US Market Data</strong>
         </p>
     </div>
