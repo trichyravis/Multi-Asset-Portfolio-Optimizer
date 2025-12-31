@@ -96,24 +96,20 @@ for idx, asset in enumerate(selected_assets_list):
     col = cols[idx % 2]
     
     with col:
-        # Get current weight - prefer validated session state
-        if st.session_state.weights_validated:
-            current_weight = st.session_state.asset_weights_adjusted.get(asset, 1.0/num_assets)
-        else:
-            current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
+        # Get current weight from session state
+        current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
         
         # Create 3-column layout for better visibility
         input_col, display_col = st.columns([3, 1])
         
         with input_col:
-            # Create a nice input field with validation
+            # Create input WITHOUT a key so it doesn't store state independently
             weight_pct = st.number_input(
                 f"📊 {asset} (%)",
                 min_value=0.0,
                 max_value=100.0,
                 value=round(current_weight * 100, 2),
                 step=0.1,
-                key=f"input_{asset}",
                 help=f"Enter percentage allocation for {asset}",
                 label_visibility="visible"
             )
@@ -186,8 +182,6 @@ with col3:
         # Update session state with equal weights
         for asset in selected_assets_list:
             st.session_state.asset_weights_adjusted[asset] = equal_weight
-            # Update the input field value directly (important!)
-            st.session_state[f"input_{asset}"] = round(equal_weight * 100, 2)
         st.session_state.weights_validated = False  # Reset validation flag
         st.rerun()
 
@@ -198,14 +192,11 @@ with col4:
             for asset in selected_assets_list:
                 normalized_weight = weights[asset] / total_weight
                 st.session_state.asset_weights_adjusted[asset] = normalized_weight
-                # Update the input field value directly (important!)
-                st.session_state[f"input_{asset}"] = round(normalized_weight * 100, 2)
             
             # Adjust last asset to ensure exactly 1.0 (100%) to handle floating point rounding
             remaining = 1.0 - sum(list(st.session_state.asset_weights_adjusted.values())[:-1])
             if len(selected_assets_list) > 0:
                 st.session_state.asset_weights_adjusted[selected_assets_list[-1]] = remaining
-                st.session_state[f"input_{selected_assets_list[-1]}"] = round(remaining * 100, 2)
             
             st.session_state.weights_validated = True
             st.rerun()
@@ -295,8 +286,6 @@ else:
         adjustment = (1.0 - total_weight) / len(selected_assets_list)
         for asset in selected_assets_list:
             weights[asset] = weights[asset] + adjustment
-            # Also update the input field values
-            st.session_state[f"input_{asset}"] = round(weights[asset] * 100, 2)
     
     st.session_state.selected_assets = weights
     st.session_state.asset_weights_adjusted = weights
