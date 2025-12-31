@@ -388,7 +388,7 @@ st.markdown("""
 nav_row1_col1, nav_row1_col2, nav_row1_col3 = st.columns([1, 1, 1])
 
 with nav_row1_col1:
-    if st.button("← Back to Optimization", key="results_to_optimize", use_container_width=True):
+    if st.button("← Back to Optimization", key="results_to_optimize", use_container_width=True, help="Go back to Optimize page"):
         st.switch_page("pages/5_Optimize.py")
 
 with nav_row1_col2:
@@ -407,7 +407,7 @@ with nav_row1_col3:
         </div>
         """, unsafe_allow_html=True)
 
-# Action buttons row - LARGE CLICKABLE CARDS
+# Action buttons row - LARGE CLICKABLE CARDS with visible buttons
 st.markdown("""
     <div style='background-color: #003366; padding: 1rem; border-radius: 0.5rem; margin: 1.5rem 0;'>
         <p style='color: white; font-weight: bold; margin: 0;'>💡 Adjust Your Results - Click Any Card:</p>
@@ -418,38 +418,38 @@ action_col1, action_col2, action_col3 = st.columns(3)
 
 with action_col1:
     st.markdown("""
-        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; border: 2px solid #FFD700;'>
             <p style='font-size: 2rem; margin: 0;'>⚙️</p>
             <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Change Weights</h3>
             <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Adjust asset weights again</p>
         </div>
         """, unsafe_allow_html=True)
     
-    if st.button("Go to Weights Page", key="results_to_weights", use_container_width=True):
+    if st.button("📄 Go to Weights", key="results_to_weights", use_container_width=True, help="Adjust asset weights and reoptimize"):
         st.switch_page("pages/2_Weights.py")
 
 with action_col2:
     st.markdown("""
-        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; border: 2px solid #FFD700;'>
             <p style='font-size: 2rem; margin: 0;'>🎯</p>
             <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Change Objective</h3>
             <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Try different optimization goal</p>
         </div>
         """, unsafe_allow_html=True)
     
-    if st.button("Go to Objective Page", key="results_to_objective", use_container_width=True):
+    if st.button("🎯 Go to Objective", key="results_to_objective", use_container_width=True, help="Try different optimization goal"):
         st.switch_page("pages/4_Objective.py")
 
 with action_col3:
     st.markdown("""
-        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; cursor: pointer; border: 2px solid #FFD700; transition: all 0.3s;'>
+        <div style='background: linear-gradient(135deg, #004d80 0%, #003366 100%); padding: 1.5rem; border-radius: 0.75rem; text-align: center; border: 2px solid #FFD700;'>
             <p style='font-size: 2rem; margin: 0;'>🏠</p>
             <h3 style='color: #FFD700; margin: 0.5rem 0; font-size: 1.3rem;'>Start Over</h3>
             <p style='color: #90EE90; font-size: 0.95rem; margin: 0.5rem 0 0 0;'>Reset and select new assets</p>
         </div>
         """, unsafe_allow_html=True)
     
-    if st.button("Go to App Page", key="results_to_app", use_container_width=True):
+    if st.button("🔄 Go to App", key="results_to_app", use_container_width=True, help="Start with new assets"):
         st.switch_page("app.py")
 
 render_footer()
