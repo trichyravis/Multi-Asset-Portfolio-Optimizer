@@ -395,6 +395,185 @@ if st.session_state.get("run_optimization", False):
     st.markdown(var_df.to_html(index=False), unsafe_allow_html=True)
     
     # ═══════════════════════════════════════════════════════════════════════════════
+    # VAR VISUALIZATIONS
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+    st.markdown("""
+        <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+            <h3 style='color: #FFD700; margin-top: 0;'>📈 VAR DISTRIBUTION ANALYSIS</h3>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # Create two columns for visualizations
+    var_viz_col1, var_viz_col2 = st.columns(2)
+    
+    # ═════════════════════════════════════════════════════════════════════════════
+    # VISUALIZATION 1: NORMAL DISTRIBUTION WITH VAR THRESHOLD
+    # ═════════════════════════════════════════════════════════════════════════════
+    
+    with var_viz_col1:
+        fig_dist, ax_dist = plt.subplots(figsize=(10, 6))
+        
+        # Generate normal distribution data
+        x = np.linspace(-6, 4, 1000)
+        y = (1/np.sqrt(2*np.pi)) * np.exp(-0.5*x**2)
+        
+        # Plot normal distribution
+        ax_dist.plot(x, y, color='#FFD700', linewidth=2.5, label='Normal Distribution')
+        ax_dist.fill_between(x, y, alpha=0.3, color='#FFD700')
+        
+        # Mark VAR threshold (at -1.645 for 95% confidence)
+        var_z_score = -1.645
+        ax_dist.axvline(var_z_score, color='#E74C3C', linestyle='--', linewidth=2.5, label='VAR @ 95% Confidence')
+        
+        # Shade the tail (5% area)
+        x_tail = x[x <= var_z_score]
+        y_tail = y[:len(x_tail)]
+        ax_dist.fill_between(x_tail, y_tail, alpha=0.7, color='#E74C3C', label='5% Tail Risk')
+        
+        # Formatting
+        ax_dist.set_xlabel('Standard Deviations (σ)', fontsize=11, color='white', fontweight='bold')
+        ax_dist.set_ylabel('Probability Density', fontsize=11, color='white', fontweight='bold')
+        ax_dist.set_title('Portfolio Return Distribution @ 95% Confidence', 
+                         fontsize=12, color='#FFD700', fontweight='bold', pad=15)
+        ax_dist.legend(loc='upper right', fontsize=10, facecolor='#003366', 
+                      edgecolor='#FFD700', labelcolor='white')
+        ax_dist.set_facecolor('#003366')
+        ax_dist.grid(True, alpha=0.2, color='white')
+        ax_dist.tick_params(colors='white', labelsize=10)
+        
+        # Add text annotation
+        ax_dist.text(var_z_score - 0.5, max(y) * 0.7, f'VAR = {opt_var_95:.2f}%\n(Max Loss)', 
+                    fontsize=10, color='white', bbox=dict(boxstyle='round', 
+                    facecolor='#E74C3C', alpha=0.8, edgecolor='#FFD700', linewidth=2))
+        
+        # Set spine colors
+        for spine in ax_dist.spines.values():
+            spine.set_color('#FFD700')
+            spine.set_linewidth(1.5)
+        
+        st.pyplot(fig_dist)
+        st.markdown("""
+        <p style='color: white; font-size: 0.9rem; text-align: center; margin-top: -10px;'>
+        <strong style='color: #FFD700;'>Interpretation:</strong> The red shaded area represents 5% tail risk. 
+        The portfolio can lose {:.2f}% with 95% confidence.
+        </p>
+        """.format(opt_var_95), unsafe_allow_html=True)
+    
+    # ═════════════════════════════════════════════════════════════════════════════
+    # VISUALIZATION 2: VAR COMPARISON BAR CHART
+    # ═════════════════════════════════════════════════════════════════════════════
+    
+    with var_viz_col2:
+        fig_comp, ax_comp = plt.subplots(figsize=(10, 6))
+        
+        portfolios = ['Current\nPortfolio', 'Optimized\nPortfolio']
+        var_values = [current_var_95, opt_var_95]
+        colors = ['#FF6B6B', '#2ECC71']
+        
+        # Create bar chart
+        bars = ax_comp.bar(portfolios, var_values, color=colors, alpha=0.8, 
+                          edgecolor='#FFD700', linewidth=2.5, width=0.6)
+        
+        # Add value labels on bars
+        for i, (bar, value) in enumerate(zip(bars, var_values)):
+            height = bar.get_height()
+            ax_comp.text(bar.get_x() + bar.get_width()/2., height,
+                        f'-{value:.2f}%',
+                        ha='center', va='bottom', fontsize=12, color='white', 
+                        fontweight='bold',
+                        bbox=dict(boxstyle='round', facecolor=colors[i], alpha=0.9, 
+                                edgecolor='#FFD700', linewidth=1.5))
+        
+        # Add improvement line
+        if var_improvement > 0:
+            ax_comp.plot([0, 1], [current_var_95, opt_var_95], 'o--', 
+                        color='#FFD700', linewidth=2.5, markersize=8, label='Risk Reduction')
+            mid_point = (current_var_95 + opt_var_95) / 2
+            ax_comp.text(0.5, mid_point, f'↓ {var_improvement:.1f}%', 
+                        ha='center', fontsize=11, color='#2ECC71', fontweight='bold',
+                        bbox=dict(boxstyle='round', facecolor='#003366', 
+                                edgecolor='#2ECC71', linewidth=2))
+        
+        # Formatting
+        ax_comp.set_ylabel('Value at Risk (%)', fontsize=11, color='white', fontweight='bold')
+        ax_comp.set_title('VAR Comparison: Current vs Optimized', 
+                         fontsize=12, color='#FFD700', fontweight='bold', pad=15)
+        ax_comp.set_facecolor('#003366')
+        ax_comp.set_ylim(0, max(var_values) * 1.2)
+        ax_comp.grid(True, alpha=0.2, axis='y', color='white')
+        ax_comp.tick_params(colors='white', labelsize=10)
+        
+        # Set spine colors
+        for spine in ax_comp.spines.values():
+            spine.set_color('#FFD700')
+            spine.set_linewidth(1.5)
+        
+        st.pyplot(fig_comp)
+        st.markdown("""
+        <p style='color: white; font-size: 0.9rem; text-align: center; margin-top: -10px;'>
+        <strong style='color: #FFD700;'>Result:</strong> Optimization reduces portfolio risk by {:.2f}% at 95% confidence level.
+        </p>
+        """.format(var_improvement), unsafe_allow_html=True)
+    
+    # ═════════════════════════════════════════════════════════════════════════════
+    # VISUALIZATION 3: RISK PROFILE COMPARISON
+    # ═════════════════════════════════════════════════════════════════════════════
+
+    st.markdown("""
+        <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+            <h3 style='color: #FFD700; margin-top: 0;'>📊 RISK METRICS COMPARISON</h3>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    fig_risk, ax_risk = plt.subplots(figsize=(12, 6))
+    
+    # Create grouped bar chart for all metrics
+    metrics_labels = ['Return\n(%)', 'Volatility\n(%)', 'VAR @ 95%\n(%)', 'Sharpe\nRatio']
+    current_metrics = [current_return, current_vol, current_var_95, current_sharpe * 10]  # Scale Sharpe for visibility
+    optimized_metrics = [opt_return, opt_vol, opt_var_95, opt_sharpe * 10]
+    
+    x = np.arange(len(metrics_labels))
+    width = 0.35
+    
+    bars1 = ax_risk.bar(x - width/2, current_metrics, width, label='Current Portfolio',
+                       color='#FF6B6B', alpha=0.8, edgecolor='#FFD700', linewidth=1.5)
+    bars2 = ax_risk.bar(x + width/2, optimized_metrics, width, label='Optimized Portfolio',
+                       color='#2ECC71', alpha=0.8, edgecolor='#FFD700', linewidth=1.5)
+    
+    # Add value labels
+    for bars in [bars1, bars2]:
+        for bar in bars:
+            height = bar.get_height()
+            ax_risk.text(bar.get_x() + bar.get_width()/2., height,
+                        f'{height:.2f}',
+                        ha='center', va='bottom', fontsize=9, color='white', fontweight='bold')
+    
+    ax_risk.set_ylabel('Value', fontsize=11, color='white', fontweight='bold')
+    ax_risk.set_title('Complete Risk Profile Comparison', 
+                     fontsize=12, color='#FFD700', fontweight='bold', pad=15)
+    ax_risk.set_xticks(x)
+    ax_risk.set_xticklabels(metrics_labels, fontsize=10, color='white', fontweight='bold')
+    ax_risk.legend(loc='upper left', fontsize=10, facecolor='#003366', 
+                  edgecolor='#FFD700', labelcolor='white', framealpha=0.95)
+    ax_risk.set_facecolor('#003366')
+    ax_risk.grid(True, alpha=0.2, axis='y', color='white')
+    ax_risk.tick_params(colors='white', labelsize=10)
+    
+    # Set spine colors
+    for spine in ax_risk.spines.values():
+        spine.set_color('#FFD700')
+        spine.set_linewidth(1.5)
+    
+    st.pyplot(fig_risk)
+    st.markdown("""
+    <p style='color: white; font-size: 0.9rem; text-align: center; margin-top: -10px;'>
+    <strong style='color: #FFD700;'>Note:</strong> Sharpe Ratio scaled by 10 for chart visibility. 
+    Lower VAR and volatility indicate better risk-adjusted returns.
+    </p>
+    """, unsafe_allow_html=True)
+    
+    # ═══════════════════════════════════════════════════════════════════════════════
     # EFFICIENT FRONTIER VISUALIZATION
     # ═══════════════════════════════════════════════════════════════════════════════
 
