@@ -1,3 +1,4 @@
+
 """
 Configuration Module for Multi-Asset Portfolio Optimization App
 Defines asset classes, colors, parameters, and styling constants
@@ -82,24 +83,18 @@ FONTS = {
 # ============================================================================
 
 OPTIMIZATION_METHODS = {
-    "max_returns": {
-        "emoji": "🚀",
-        "label": "Maximum Returns",
-        "description": "Aggressive strategy - maximize portfolio return",
-        "formula": "max(w^T × μ)",
+    "max_sharpe": {
+        "emoji": "⚡",
+        "label": "Maximize Sharpe Ratio (RECOMMENDED)",
+        "description": "Balanced strategy - best risk-adjusted returns. Maximizes return per unit of risk.",
+        "formula": "max((w^T × μ - Rf) / √(w^T × Σ × w))",
     },
     "min_risk": {
         "emoji": "🛡️",
-        "label": "Minimum Risk (MVP)",
-        "description": "Conservative strategy - minimize portfolio volatility",
+        "label": "Minimize Risk",
+        "description": "Conservative strategy - minimize portfolio volatility while maintaining target return.",
         "formula": "min(√(w^T × Σ × w))",
     },
-    "max_sharpe": {
-        "emoji": "⚡",
-        "label": "Maximum Sharpe Ratio",
-        "description": "Balanced strategy - best risk-adjusted returns (RECOMMENDED)",
-        "formula": "max((w^T × μ - Rf) / √(w^T × Σ × w))",
-    }
 }
 
 # ============================================================================
