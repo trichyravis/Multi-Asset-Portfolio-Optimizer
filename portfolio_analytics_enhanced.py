@@ -267,16 +267,20 @@ def plot_efficient_frontier_2d(assets, initial_weights, optimized_weights=None):
             font=dict(size=18, color='#003366')
         ),
         xaxis=dict(
-            title="<b>Risk (Volatility)</b>",
-            titlefont=dict(size=14, color='#003366'),
+            title=dict(
+                text="<b>Risk (Volatility)</b>",
+                font=dict(size=14, color='#003366')
+            ),
             tickformat='.2%',
             gridcolor='rgba(0, 51, 102, 0.2)',
             showgrid=True,
             zeroline=False
         ),
         yaxis=dict(
-            title="<b>Expected Return</b>",
-            titlefont=dict(size=14, color='#003366'),
+            title=dict(
+                text="<b>Expected Return</b>",
+                font=dict(size=14, color='#003366')
+            ),
             tickformat='.2%',
             gridcolor='rgba(0, 51, 102, 0.2)',
             showgrid=True,
