@@ -83,16 +83,15 @@ def apply_custom_styles():
     }}
     
     /* ====================================================================
-       TEXT STYLING - EXPLICIT WHITE FOR ALL TEXT
+       TEXT STYLING - COMPREHENSIVE WHITE FOR ALL ELEMENTS
        ==================================================================== */
     
-    /* All paragraphs, spans, divs - explicit white */
-    p, span, div {{
+    /* All common text elements on dark background = WHITE */
+    p, span, div, label, caption, a {{
         color: #FFFFFF !important;
-        font-size: {FONTS['body']}px !important;
     }}
     
-    /* Markdown containers - explicit white */
+    /* Paragraph text - white */
     [data-testid="stMarkdownContainer"] {{
         color: #FFFFFF !important;
     }}
@@ -101,8 +100,55 @@ def apply_custom_styles():
         color: #FFFFFF !important;
     }}
     
-    .element-container {{
-        background-color: transparent !important;
+    /* Dark text in INPUT BOXES with light backgrounds */
+    [data-testid="stSelectbox"] div[data-baseweb="select"] * {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stNumberInput"] input {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stTextInput"] input {{
+        color: #000000 !important;
+    }}
+    
+    /* Buttons get dark text on gold */
+    button {{
+        color: #003366 !important;
+    }}
+    
+    /* Select boxes - dark text in light backgrounds */
+    [data-testid="stSelectbox"] div[data-baseweb="select"] {{
+        color: #000000 !important;
+    }}
+    
+    [data-testid="stMultiSelect"] {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Sidebar - all white */
+    [data-testid="stSidebar"] {{
+        color: #FFFFFF !important;
+    }}
+    
+    [data-testid="stSidebar"] * {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Main content - all white */
+    .main {{
+        color: #FFFFFF !important;
+    }}
+    
+    .main * {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Headers - GOLD */
+    h1, h2, h3, h4, h5, h6 {{
+        color: {COLORS['gold']} !important;
+        font-weight: 700 !important;
     }}
     
     /* ====================================================================
@@ -535,23 +581,24 @@ def apply_custom_styles():
        ==================================================================== */
     
     /* Ensure all text on light backgrounds is dark */
+    /* All text in containers should be WHITE on dark blue background */
     [data-testid="stMarkdownContainer"] {{
-        color: #000000 !important;
+        color: #FFFFFF !important;
     }}
     
     [data-testid="stMarkdownContainer"] p {{
-        color: #000000 !important;
+        color: #FFFFFF !important;
     }}
     
     [data-testid="stMarkdownContainer"] span {{
-        color: #000000 !important;
+        color: #FFFFFF !important;
     }}
     
     [data-testid="stMarkdownContainer"] * {{
-        color: #000000 !important;
+        color: #FFFFFF !important;
     }}
     
-    /* Info/Warning/Error box styling */
+    /* Info/Warning/Error boxes have light background, need dark text */
     [data-testid="stNotification"] {{
         background-color: {COLORS['light_blue']} !important;
         color: #000000 !important;
@@ -561,15 +608,78 @@ def apply_custom_styles():
         color: #000000 !important;
     }}
     
-    /* Ensure success/warning/error messages are readable */
+    /* Ensure success/warning/error messages on light backgrounds are readable */
     .stAlert {{
         color: #000000 !important;
     }}
     
-    </style>
-    """
+    /* ====================================================================
+       FINAL TEXT VISIBILITY FIX - COMPREHENSIVE WHITE STYLING
+       ==================================================================== */
     
-    st.markdown(custom_css, unsafe_allow_html=True)
+    /* CRITICAL: Ensure ALL text on dark background is WHITE */
+    body {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* All generic elements */
+    p {{
+        color: #FFFFFF !important;
+    }}
+    
+    span {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* All text in main area */
+    .main p {{
+        color: #FFFFFF !important;
+    }}
+    
+    .main span {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* All text in sidebar */
+    [data-testid="stSidebar"] p {{
+        color: #FFFFFF !important;
+    }}
+    
+    [data-testid="stSidebar"] span {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Step labels and all markdown text */
+    [data-testid="stMarkdownContainer"] p {{
+        color: #FFFFFF !important;
+    }}
+    
+    [data-testid="stMarkdownContainer"] span {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Element containers with text */
+    .element-container p {{
+        color: #FFFFFF !important;
+    }}
+    
+    .element-container span {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* All captions and smaller text */
+    .caption {{
+        color: #FFFFFF !important;
+    }}
+    
+    /* Ensure text in metrics */
+    [data-testid="metric-container"] p {{
+        color: #FFFFFF !important;
+    }}
+    
+    [data-testid="metric-container"] span {{
+        color: #FFFFFF !important;
+    }}
 
 
 def get_metric_color(value: float, metric_type: str = "return") -> str:
