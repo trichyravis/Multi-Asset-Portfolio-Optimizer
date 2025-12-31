@@ -35,12 +35,10 @@ if "risk_free_rate" not in st.session_state:
     st.session_state.risk_free_rate = 4.5
 if "investment_period" not in st.session_state:
     st.session_state.investment_period = 5
-if "asset_class" not in st.session_state:
-    st.session_state.asset_class = "Stocks"
+if "selected_asset_classes" not in st.session_state:
+    st.session_state.selected_asset_classes = []
 if "selected_assets" not in st.session_state:
-    st.session_state.selected_assets = {}  # Changed from list to dict
-if "asset_weights" not in st.session_state:
-    st.session_state.asset_weights = {}
+    st.session_state.selected_assets = {}
 
 # Define asset classes and their assets
 ASSET_CLASSES = {
@@ -50,12 +48,11 @@ ASSET_CLASSES = {
     "Cryptocurrencies": ["BTC", "ETH", "BNB", "ADA", "SOL"]
 }
 
-# Asset class descriptions
 CLASS_DESCRIPTIONS = {
-    "Stocks": "Equity securities - 📈 Higher growth potential, higher volatility",
-    "Bonds": "Fixed income securities - 📊 Lower risk, stable returns",
-    "Commodities": "Raw materials & precious metals - 🏆 Portfolio diversification",
-    "Cryptocurrencies": "Digital assets - ⚡ High volatility, emerging asset class"
+    "Stocks": "📈 Equity securities - Higher growth potential, higher volatility",
+    "Bonds": "📊 Fixed income - Lower risk, stable returns",
+    "Commodities": "🏆 Raw materials & metals - Portfolio diversification",
+    "Cryptocurrencies": "⚡ Digital assets - High volatility, emerging class"
 }
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -105,48 +102,100 @@ with col2:
     st.session_state.investment_period = period
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# STEP 2: SELECT ASSET CLASS
+# STEP 2: SELECT ASSET CLASSES (MULTIPLE)
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>📊 STEP 2: SELECT ASSET CLASS</h2>
-        <p style='color: white;'>Choose the category for your portfolio:</p>
+        <h2 style='color: #FFD700; margin-top: 0;'>📊 STEP 2: SELECT ASSET CLASSES</h2>
+        <p style='color: white;'>Choose one or more categories for your portfolio:</p>
     </div>
     """, unsafe_allow_html=True)
 
-asset_class = st.selectbox(
-    "Which asset class?",
-    list(ASSET_CLASSES.keys()),
-    index=list(ASSET_CLASSES.keys()).index(st.session_state.asset_class)
-)
-st.session_state.asset_class = asset_class
+# Multiple class selection with checkboxes
+col1, col2, col3, col4 = st.columns(4)
 
-# Show description and available assets
-col1, col2 = st.columns(2)
+selected_classes = []
 
 with col1:
-    st.markdown(f"""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
-            <p style='color: white; margin: 0;'><strong>About {asset_class}</strong></p>
-            <p style='color: #FFD700; margin: 0.5rem 0 0 0; font-size: 0.9rem;'>{CLASS_DESCRIPTIONS[asset_class]}</p>
-        </div>
-        """, unsafe_allow_html=True)
+    if st.checkbox("📈 Stocks", value="Stocks" in st.session_state.selected_asset_classes):
+        selected_classes.append("Stocks")
 
 with col2:
-    assets_str = ", ".join(ASSET_CLASSES[asset_class][:6])
-    if len(ASSET_CLASSES[asset_class]) > 6:
-        assets_str += f", +{len(ASSET_CLASSES[asset_class]) - 6} more"
+    if st.checkbox("📊 Bonds", value="Bonds" in st.session_state.selected_asset_classes):
+        selected_classes.append("Bonds")
+
+with col3:
+    if st.checkbox("🏆 Commodities", value="Commodities" in st.session_state.selected_asset_classes):
+        selected_classes.append("Commodities")
+
+with col4:
+    if st.checkbox("⚡ Cryptocurrencies", value="Cryptocurrencies" in st.session_state.selected_asset_classes):
+        selected_classes.append("Cryptocurrencies")
+
+st.session_state.selected_asset_classes = selected_classes
+
+# Show selected classes info
+if selected_classes:
+    st.markdown("")
+    info_cols = st.columns(len(selected_classes))
     
-    st.markdown(f"""
-        <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
-            <p style='color: white; margin: 0;'><strong>Available Assets</strong></p>
-            <p style='color: #90EE90; margin: 0.5rem 0 0 0; font-size: 0.9rem;'>{assets_str}</p>
-        </div>
-        """, unsafe_allow_html=True)
+    for idx, asset_class in enumerate(selected_classes):
+        with info_cols[idx]:
+            st.markdown(f"""
+                <div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
+                    <p style='color: white; margin: 0;'><strong>{asset_class}</strong></p>
+                    <p style='color: #FFD700; margin: 0.5rem 0 0 0; font-size: 0.85rem;'>{CLASS_DESCRIPTIONS[asset_class]}</p>
+                </div>
+                """, unsafe_allow_html=True)
+else:
+    st.warning("⚠️ Please select at least one asset class to continue!")
+    st.stop()
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# CURRENT ASSUMPTIONS DISPLAY
+# STEP 3: SELECT SPECIFIC ASSETS (2-6)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🎯 STEP 3: SELECT SPECIFIC ASSETS</h2>
+        <p style='color: white;'>Choose 2-6 assets from your selected classes:</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+# Get all available assets from selected classes
+available_assets = []
+for asset_class in selected_classes:
+    available_assets.extend(ASSET_CLASSES[asset_class])
+
+available_assets = sorted(list(set(available_assets)))  # Remove duplicates and sort
+
+st.info(f"📌 Available assets: {', '.join(available_assets)}")
+
+# Multi-select for specific assets
+selected_assets = st.multiselect(
+    "Select 2-6 assets:",
+    options=available_assets,
+    default=[asset for asset in st.session_state.selected_assets.keys() if asset in available_assets],
+    max_selections=6,
+    help="Choose 2-6 assets for your portfolio"
+)
+
+# Validate selection
+if len(selected_assets) < 2:
+    st.error("⚠️ Please select at least 2 assets!")
+    st.stop()
+elif len(selected_assets) > 6:
+    st.error("⚠️ Please select at most 6 assets!")
+    st.stop()
+
+# Initialize equal weights for selected assets
+equal_weight = 1.0 / len(selected_assets)
+selected_assets_dict = {asset: equal_weight for asset in selected_assets}
+st.session_state.selected_assets = selected_assets_dict
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CURRENT SETTINGS DISPLAY
 # ═══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("")
@@ -159,23 +208,73 @@ st.markdown("""
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric("Risk-Free Rate", f"{st.session_state.risk_free_rate:.2f}%")
+    st.metric("💰 Risk-Free Rate", f"{st.session_state.risk_free_rate:.2f}%")
 
 with col2:
-    st.metric("Investment Period", f"{st.session_state.investment_period} years")
+    st.metric("📅 Investment Period", f"{st.session_state.investment_period} years")
 
 with col3:
-    st.metric("Asset Class", st.session_state.asset_class)
+    st.metric("🎯 Assets Selected", f"{len(selected_assets)}")
+
+# Show selected assets and default weights
+st.markdown("")
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 1rem 0;'>
+        <h3 style='color: #FFD700; margin-top: 0;'>📈 SELECTED ASSETS (Default Weights)</h3>
+    </div>
+    """, unsafe_allow_html=True)
+
+assets_table = f"""
+<div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
+    <table style='width: 100%; border-collapse: collapse;'>
+        <thead>
+            <tr style='background-color: #003366;'>
+                <th style='color: #FFD700; padding: 0.75rem; text-align: left; border-bottom: 2px solid #FFD700;'>Asset</th>
+                <th style='color: #FFD700; padding: 0.75rem; text-align: center; border-bottom: 2px solid #FFD700;'>Default Weight</th>
+                <th style='color: #FFD700; padding: 0.75rem; text-align: center; border-bottom: 2px solid #FFD700;'>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+"""
+
+for asset in selected_assets:
+    # Find which class this asset belongs to
+    asset_class = ""
+    for cls, assets in ASSET_CLASSES.items():
+        if asset in assets:
+            asset_class = cls
+            break
+    
+    assets_table += f"""
+            <tr style='border-bottom: 1px solid rgba(255, 255, 255, 0.2);'>
+                <td style='color: white; padding: 0.75rem; text-align: left;'>
+                    <strong>{asset}</strong>
+                </td>
+                <td style='color: #90EE90; padding: 0.75rem; text-align: center; font-weight: bold;'>
+                    {equal_weight*100:.1f}%
+                </td>
+                <td style='color: #FFD700; padding: 0.75rem; text-align: center;'>
+                    {asset_class}
+                </td>
+            </tr>
+    """
+
+assets_table += """
+        </tbody>
+    </table>
+</div>
+"""
+
+st.markdown(assets_table, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # WORKFLOW GUIDE
 # ═══════════════════════════════════════════════════════════════════════════════
 
-st.markdown("")
 st.markdown("""
     <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
-        <h2 style='color: #FFD700; margin-top: 0;'>🚀 WORKFLOW</h2>
-        <p style='color: white;'>Follow these steps to optimize your portfolio:</p>
+        <h2 style='color: #FFD700; margin-top: 0;'>🚀 NEXT STEPS</h2>
+        <p style='color: white;'>You have completed Step 1-3. Continue with:</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -183,39 +282,29 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("""
-    **Step 1: Set Assumptions** ✅ (You are here!)
-    - Risk-Free Rate
-    - Investment Period
-    
-    **Step 3: Analyze**
-    - Go to sidebar → 📊 **Analysis**
-    - View current portfolio performance
+    **Step 4: Set Weights**
+    - Go to sidebar → ⚖️ **Weights**
+    - Adjust weights for each asset
+    - Total must equal 100%
     """)
 
 with col2:
     st.markdown("""
-    **Step 2: Set Weights**
-    - Go to sidebar → ⚖️ **Weights**
-    - Select 2-6 assets from chosen class
-    - Set weights (100% total)
-    
-    **Step 4-5: Optimize & Results**
-    - Go to sidebar → 🎯 **Objective** → 🚀 **Optimize**
-    - Go to 📊 **Results** to view optimized portfolio
+    **Step 5-7: Analyze & Optimize**
+    - Go to 📊 **Analysis** → View current metrics
+    - Go to 🎯 **Objective** → Choose goal
+    - Go to 🚀 **Optimize** → Run optimization
+    - Go to 📊 **Results** → View optimized portfolio
     """)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# INFO BOXES
-# ═══════════════════════════════════════════════════════════════════════════════
-
+# Info boxes
 st.markdown("")
-
 st.info("""
-💡 **Next Step:** Go to **⚖️ Weights** in the sidebar to select specific assets and set their weights.
+💡 **Next Step:** Go to **⚖️ Weights** page to adjust weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
 """)
 
 st.success("""
-✅ **Your settings are ready!** Your risk-free rate and investment period will be used in all calculations.
-""")
+✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({:.2f}%) and investment period ({} years).
+""".format(st.session_state.risk_free_rate, st.session_state.investment_period))
 
 render_footer()
