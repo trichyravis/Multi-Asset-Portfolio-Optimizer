@@ -316,7 +316,7 @@ st.markdown("""
 nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 1])
 
 with nav_col1:
-    if st.button("← Back to Weights", key="analysis_to_weights", use_container_width=True):
+    if st.button("← Back to Weights", key="analysis_to_weights", use_container_width=True, help="Go back to Weights page"):
         st.switch_page("pages/2_Weights.py")
 
 with nav_col2:
@@ -328,7 +328,7 @@ with nav_col2:
         """, unsafe_allow_html=True)
 
 with nav_col3:
-    if st.button("Next: Objective →", key="analysis_to_objective", use_container_width=True):
+    if st.button("Next: Objective →", key="analysis_to_objective", use_container_width=True, help="Go to Objective page"):
         st.switch_page("pages/4_Objective.py")
 
 render_footer()
