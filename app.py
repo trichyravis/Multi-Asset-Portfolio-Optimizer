@@ -11,6 +11,7 @@ Prof. V. Ravichandran
 """
 
 import streamlit as st
+import pandas as pd
 from config_enhanced import PAGE_CONFIG, ASSET_STATS
 from styles_enhanced import apply_main_styles, render_header, render_footer
 
@@ -248,19 +249,8 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-assets_table = f"""
-<div style='background-color: #004d80; padding: 1.5rem; border-radius: 0.5rem;'>
-    <table style='width: 100%; border-collapse: collapse;'>
-        <thead>
-            <tr style='background-color: #003366;'>
-                <th style='color: #FFD700; padding: 0.75rem; text-align: left; border-bottom: 2px solid #FFD700;'>Asset</th>
-                <th style='color: #FFD700; padding: 0.75rem; text-align: center; border-bottom: 2px solid #FFD700;'>Default Weight</th>
-                <th style='color: #FFD700; padding: 0.75rem; text-align: center; border-bottom: 2px solid #FFD700;'>Class</th>
-            </tr>
-        </thead>
-        <tbody>
-"""
-
+# Create dataframe for assets
+assets_data = []
 for asset in selected_assets_list:
     # Find which class this asset belongs to
     asset_class = ""
@@ -269,27 +259,23 @@ for asset in selected_assets_list:
             asset_class = cls
             break
     
-    assets_table += f"""
-            <tr style='border-bottom: 1px solid rgba(255, 255, 255, 0.2);'>
-                <td style='color: white; padding: 0.75rem; text-align: left;'>
-                    <strong>{asset}</strong>
-                </td>
-                <td style='color: #90EE90; padding: 0.75rem; text-align: center; font-weight: bold;'>
-                    {equal_weight*100:.1f}%
-                </td>
-                <td style='color: #FFD700; padding: 0.75rem; text-align: center;'>
-                    {asset_class}
-                </td>
-            </tr>
-    """
+    assets_data.append({
+        "Asset": asset,
+        "Default Weight": f"{equal_weight*100:.1f}%",
+        "Class": asset_class
+    })
 
-assets_table += """
-        </tbody>
-    </table>
-</div>
-"""
-
-st.markdown(assets_table, unsafe_allow_html=True)
+df_assets = pd.DataFrame(assets_data)
+st.dataframe(
+    df_assets,
+    use_container_width=True,
+    hide_index=True,
+    column_config={
+        "Asset": st.column_config.TextColumn("Asset", width="medium"),
+        "Default Weight": st.column_config.TextColumn("Default Weight", width="medium"),
+        "Class": st.column_config.TextColumn("Class", width="medium")
+    }
+)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # WORKFLOW GUIDE
