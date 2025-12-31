@@ -177,6 +177,140 @@ def generate_efficient_frontier(assets, num_portfolios=1000):
 # PLOT EFFICIENT FRONTIER 3D
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# PLOT EFFICIENT FRONTIER 2D (Normal)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def plot_efficient_frontier_2d(assets, initial_weights, optimized_weights=None):
+    """
+    Create interactive 2D efficient frontier plot
+    
+    Args:
+        assets: List of asset tickers
+        initial_weights: Initial portfolio weights
+        optimized_weights: Optimized portfolio weights
+        
+    Returns:
+        Plotly figure
+    """
+    # Generate efficient frontier
+    frontier = generate_efficient_frontier(assets, num_portfolios=2000)
+    
+    # Calculate initial portfolio metrics
+    initial_metrics = calculate_portfolio_metrics(assets, initial_weights)
+    
+    # Create 2D scatter plot
+    fig = go.Figure()
+    
+    # Add efficient frontier points (colored by Sharpe Ratio)
+    fig.add_trace(go.Scatter(
+        x=frontier["Volatility"],
+        y=frontier["Return"],
+        mode='markers',
+        marker=dict(
+            size=5,
+            color=frontier["Sharpe Ratio"],
+            colorscale='Blues',
+            showscale=True,
+            colorbar=dict(
+                title="Sharpe<br>Ratio",
+                thickness=15,
+                len=0.7
+            ),
+            line=dict(width=0)
+        ),
+        name='Random Portfolios',
+        text=[f"Return: {r:.2%}<br>Volatility (Risk): {v:.2%}<br>Sharpe Ratio: {s:.2f}" 
+              for r, v, s in zip(frontier["Return"], frontier["Volatility"], frontier["Sharpe Ratio"])],
+        hoverinfo='text',
+        hovertemplate='<b>Portfolio</b><br>%{text}<extra></extra>'
+    ))
+    
+    # Add initial portfolio
+    fig.add_trace(go.Scatter(
+        x=[initial_metrics["volatility"]],
+        y=[initial_metrics["annual_return"]],
+        mode='markers+text',
+        marker=dict(size=15, color='#FFD700', symbol='square', line=dict(color='white', width=2)),
+        name='Initial Portfolio',
+        text=['Initial'],
+        textposition='top center',
+        textfont=dict(color='#003366', size=12, family='Arial Black'),
+        hovertext=f"Initial Portfolio<br>Return: {initial_metrics['annual_return']:.2%}<br>Risk: {initial_metrics['volatility']:.2%}<br>Sharpe Ratio: {initial_metrics['sharpe_ratio']:.2f}",
+        hoverinfo='text',
+        hovertemplate='<b>%{hovertext}</b><extra></extra>'
+    ))
+    
+    # Add optimized portfolio if provided
+    if optimized_weights:
+        optimized_metrics = calculate_portfolio_metrics(assets, optimized_weights)
+        fig.add_trace(go.Scatter(
+            x=[optimized_metrics["volatility"]],
+            y=[optimized_metrics["annual_return"]],
+            mode='markers+text',
+            marker=dict(size=15, color='#00FF00', symbol='diamond', line=dict(color='white', width=2)),
+            name='Optimized Portfolio',
+            text=['Optimized'],
+            textposition='top center',
+            textfont=dict(color='#003366', size=12, family='Arial Black'),
+            hovertext=f"Optimized Portfolio<br>Return: {optimized_metrics['annual_return']:.2%}<br>Risk: {optimized_metrics['volatility']:.2%}<br>Sharpe Ratio: {optimized_metrics['sharpe_ratio']:.2f}",
+            hoverinfo='text',
+            hovertemplate='<b>%{hovertext}</b><extra></extra>'
+        ))
+    
+    # Update layout
+    fig.update_layout(
+        title=dict(
+            text="<b>Efficient Frontier Analysis</b><br><sub>Risk vs Return (Colored by Sharpe Ratio)</sub>",
+            x=0.5,
+            xanchor='center',
+            font=dict(size=18, color='#003366')
+        ),
+        xaxis=dict(
+            title="<b>Risk (Volatility)</b>",
+            titlefont=dict(size=14, color='#003366'),
+            tickformat='.2%',
+            gridcolor='rgba(0, 51, 102, 0.2)',
+            showgrid=True,
+            zeroline=False
+        ),
+        yaxis=dict(
+            title="<b>Expected Return</b>",
+            titlefont=dict(size=14, color='#003366'),
+            tickformat='.2%',
+            gridcolor='rgba(0, 51, 102, 0.2)',
+            showgrid=True,
+            zeroline=False
+        ),
+        plot_bgcolor='rgba(255, 255, 255, 0.95)',
+        paper_bgcolor='white',
+        font=dict(family='Arial', size=11, color='#003366'),
+        hovermode='closest',
+        height=600,
+        margin=dict(l=80, r=80, t=100, b=80),
+        legend=dict(
+            x=0.02,
+            y=0.98,
+            bgcolor='rgba(255, 255, 255, 0.8)',
+            bordercolor='#003366',
+            borderwidth=1
+        ),
+        showlegend=True
+    )
+    
+    # Add annotations
+    fig.add_annotation(
+        text="<i>Hover over points to see details | Square=Initial Portfolio | Diamond=Optimized Portfolio</i>",
+        xref="paper", yref="paper",
+        x=0.5, y=-0.12,
+        showarrow=False,
+        font=dict(size=10, color='#666666'),
+        xanchor='center'
+    )
+    
+    return fig
+
+
 def plot_efficient_frontier_3d(assets, initial_weights, optimized_weights=None):
     """
     Create interactive 3D efficient frontier plot
