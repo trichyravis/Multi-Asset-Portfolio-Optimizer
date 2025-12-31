@@ -106,17 +106,53 @@ if "investment_period" not in st.session_state:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 ASSET_DATA = {
-    # Stocks
+    # Tech Giants
     "AAPL": {"return": 28.5, "volatility": 32.1, "class": "Stocks"},
     "MSFT": {"return": 26.3, "volatility": 28.9, "class": "Stocks"},
     "GOOGL": {"return": 24.7, "volatility": 30.2, "class": "Stocks"},
     "AMZN": {"return": 22.1, "volatility": 34.5, "class": "Stocks"},
     "NVDA": {"return": 35.2, "volatility": 45.8, "class": "Stocks"},
+    "META": {"return": 25.8, "volatility": 38.4, "class": "Stocks"},
+    "INTC": {"return": 18.9, "volatility": 31.5, "class": "Stocks"},
+    "AMD": {"return": 22.4, "volatility": 42.1, "class": "Stocks"},
+    
+    # Financial Services
     "JPM": {"return": 15.3, "volatility": 25.6, "class": "Stocks"},
     "BAC": {"return": 12.5, "volatility": 28.3, "class": "Stocks"},
-    "XOM": {"return": 8.9, "volatility": 22.4, "class": "Stocks"},
+    "WFC": {"return": 11.8, "volatility": 27.5, "class": "Stocks"},
+    "GS": {"return": 14.2, "volatility": 29.8, "class": "Stocks"},
+    "V": {"return": 19.5, "volatility": 24.3, "class": "Stocks"},
+    "MA": {"return": 20.1, "volatility": 25.6, "class": "Stocks"},
+    "PYPL": {"return": 16.8, "volatility": 38.2, "class": "Stocks"},
+    
+    # Healthcare & Pharma
+    "JNJ": {"return": 10.2, "volatility": 18.4, "class": "Stocks"},
+    "UNH": {"return": 17.6, "volatility": 22.1, "class": "Stocks"},
+    "PFE": {"return": 8.9, "volatility": 21.3, "class": "Stocks"},
+    "LLY": {"return": 14.3, "volatility": 20.2, "class": "Stocks"},
+    "ABBV": {"return": 12.7, "volatility": 19.8, "class": "Stocks"},
+    
+    # Consumer & Retail
     "PG": {"return": 9.7, "volatility": 16.8, "class": "Stocks"},
     "KO": {"return": 7.3, "volatility": 18.2, "class": "Stocks"},
+    "PEP": {"return": 8.5, "volatility": 17.3, "class": "Stocks"},
+    "HD": {"return": 13.2, "volatility": 21.5, "class": "Stocks"},
+    "MCD": {"return": 10.8, "volatility": 19.2, "class": "Stocks"},
+    "COST": {"return": 11.5, "volatility": 20.1, "class": "Stocks"},
+    "WMT": {"return": 9.3, "volatility": 17.8, "class": "Stocks"},
+    
+    # Energy & Utilities
+    "XOM": {"return": 8.9, "volatility": 22.4, "class": "Stocks"},
+    "CVX": {"return": 8.2, "volatility": 23.1, "class": "Stocks"},
+    "SO": {"return": 6.5, "volatility": 14.2, "class": "Stocks"},
+    
+    # Media & Entertainment
+    "NFLX": {"return": 20.3, "volatility": 42.8, "class": "Stocks"},
+    "DIS": {"return": 12.4, "volatility": 26.3, "class": "Stocks"},
+    
+    # Transportation & Other
+    "TSLA": {"return": 32.1, "volatility": 58.3, "class": "Stocks"},
+    "BA": {"return": 9.8, "volatility": 29.4, "class": "Stocks"},
     
     # Bonds
     "BND": {"return": 4.2, "volatility": 6.3, "class": "Bonds"},
