@@ -135,19 +135,13 @@ for idx, asset in enumerate(selected_assets_list):
 total_weight = sum(weights.values())
 total_pct = total_weight * 100
 
-# Check if weights match validated session state - if so, skip recalculation
-current_input_total = total_pct
-validated_total = sum(st.session_state.asset_weights_adjusted.values()) * 100
-
-# If weights are validated and haven't changed significantly, use session state
-if st.session_state.weights_validated and abs(current_input_total - validated_total) < 0.1:
-    # Use the validated weights from session state
-    weights = st.session_state.asset_weights_adjusted.copy()
-    total_weight = sum(weights.values())
-    total_pct = total_weight * 100
-else:
-    # Weights have been modified, clear the validated flag
-    st.session_state.weights_validated = False
+# Check if user manually modified inputs after validation
+if st.session_state.weights_validated:
+    # Compare current weights with session state
+    session_total = sum(st.session_state.asset_weights_adjusted.values()) * 100
+    # If inputs differ by more than 0.5%, user modified them, clear validation
+    if abs(total_pct - session_total) > 0.5:
+        st.session_state.weights_validated = False
 
 st.markdown("")
 
@@ -192,9 +186,9 @@ with col3:
         # Update session state with equal weights
         for asset in selected_assets_list:
             st.session_state.asset_weights_adjusted[asset] = equal_weight
-            # Clear the widget input state to force reload from session state
-            if f"input_{asset}" in st.session_state:
-                del st.session_state[f"input_{asset}"]
+            # Update the input field value directly (important!)
+            st.session_state[f"input_{asset}"] = round(equal_weight * 100, 2)
+        st.session_state.weights_validated = False  # Reset validation flag
         st.rerun()
 
 with col4:
@@ -204,15 +198,16 @@ with col4:
             for asset in selected_assets_list:
                 normalized_weight = weights[asset] / total_weight
                 st.session_state.asset_weights_adjusted[asset] = normalized_weight
-                # Clear the widget input state to force reload from session state
-                if f"input_{asset}" in st.session_state:
-                    del st.session_state[f"input_{asset}"]
+                # Update the input field value directly (important!)
+                st.session_state[f"input_{asset}"] = round(normalized_weight * 100, 2)
             
             # Adjust last asset to ensure exactly 1.0 (100%) to handle floating point rounding
             remaining = 1.0 - sum(list(st.session_state.asset_weights_adjusted.values())[:-1])
             if len(selected_assets_list) > 0:
                 st.session_state.asset_weights_adjusted[selected_assets_list[-1]] = remaining
+                st.session_state[f"input_{selected_assets_list[-1]}"] = round(remaining * 100, 2)
             
+            st.session_state.weights_validated = True
             st.rerun()
         else:
             st.error("❌ Cannot normalize - all weights are 0. Please enter values first.")
@@ -271,9 +266,9 @@ st.markdown("")
 # Initialize flag for showing success message
 show_success = False
 
-# Check: If weights are already validated and match session state, skip validation warning
-if st.session_state.weights_validated and abs(current_input_total - validated_total) < 0.1:
-    # Weights are validated! Use session state values and show success
+# PRIORITY CHECK: If weights are already validated, use session state directly (no comparison needed!)
+if st.session_state.weights_validated:
+    # Weights are validated! Trust session state completely
     weights = st.session_state.asset_weights_adjusted.copy()
     total_weight = sum(weights.values())
     total_pct = total_weight * 100
@@ -300,6 +295,8 @@ else:
         adjustment = (1.0 - total_weight) / len(selected_assets_list)
         for asset in selected_assets_list:
             weights[asset] = weights[asset] + adjustment
+            # Also update the input field values
+            st.session_state[f"input_{asset}"] = round(weights[asset] * 100, 2)
     
     st.session_state.selected_assets = weights
     st.session_state.asset_weights_adjusted = weights
