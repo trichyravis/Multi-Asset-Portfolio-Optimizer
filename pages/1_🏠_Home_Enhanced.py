@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - HOME PAGE (ENHANCED)
@@ -369,7 +370,7 @@ col1, col2 = st.columns([1, 3])
 
 with col1:
     if st.button("🚀 OPTIMIZE PORTFOLIO", use_container_width=True, type="primary"):
-        st.switch_page("pages/2_📊_Results.py")
+        st.switch_page("pages/2_📊_Results_Enhanced.py")
 
 with col2:
     st.write("Click to proceed to optimization and see recommended portfolio allocation")
