@@ -84,6 +84,10 @@ st.markdown("""
 if "asset_weights_adjusted" not in st.session_state or len(st.session_state.asset_weights_adjusted) == 0:
     st.session_state.asset_weights_adjusted = {asset: value for asset, value in st.session_state.selected_assets.items()}
 
+# Track if weights have been validated and saved
+if "weights_validated" not in st.session_state:
+    st.session_state.weights_validated = False
+
 # Create input fields for each asset in 2 columns with visible values
 weights = {}
 cols = st.columns(2)
@@ -92,8 +96,11 @@ for idx, asset in enumerate(selected_assets_list):
     col = cols[idx % 2]
     
     with col:
-        # Get current weight
-        current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
+        # Get current weight - prefer validated session state
+        if st.session_state.weights_validated:
+            current_weight = st.session_state.asset_weights_adjusted.get(asset, 1.0/num_assets)
+        else:
+            current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
         
         # Create 3-column layout for better visibility
         input_col, display_col = st.columns([3, 1])
@@ -127,6 +134,20 @@ for idx, asset in enumerate(selected_assets_list):
 
 total_weight = sum(weights.values())
 total_pct = total_weight * 100
+
+# Check if weights match validated session state - if so, skip recalculation
+current_input_total = total_pct
+validated_total = sum(st.session_state.asset_weights_adjusted.values()) * 100
+
+# If weights are validated and haven't changed significantly, use session state
+if st.session_state.weights_validated and abs(current_input_total - validated_total) < 0.1:
+    # Use the validated weights from session state
+    weights = st.session_state.asset_weights_adjusted.copy()
+    total_weight = sum(weights.values())
+    total_pct = total_weight * 100
+else:
+    # Weights have been modified, clear the validated flag
+    st.session_state.weights_validated = False
 
 st.markdown("")
 
@@ -270,6 +291,7 @@ else:
     
     st.session_state.selected_assets = weights
     st.session_state.asset_weights_adjusted = weights
+    st.session_state.weights_validated = True  # Mark as validated
     
     # Recalculate with corrected weights
     total_weight_corrected = sum(weights.values())
