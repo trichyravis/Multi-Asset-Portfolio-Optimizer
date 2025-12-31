@@ -316,6 +316,6 @@ with col1:
 
 with col2:
     if st.button("▶️ Go to Objective Page", key="go_to_objective", use_container_width=True):
-        st.switch_page("pages/4_🎯_Objective.py")
+        st.switch_page("pages/4_Objective.py")
 
 render_footer()
