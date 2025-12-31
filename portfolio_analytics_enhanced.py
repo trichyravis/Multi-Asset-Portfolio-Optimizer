@@ -1,3 +1,4 @@
+
 """
 ═══════════════════════════════════════════════════════════════════════════════
 🏔️ THE MOUNTAIN PATH - PORTFOLIO ANALYTICS
@@ -222,7 +223,7 @@ def plot_efficient_frontier_3d(assets, initial_weights, optimized_weights=None):
         y=[initial_metrics["annual_return"]],
         z=[initial_metrics["sharpe_ratio"]],
         mode='markers',
-        marker=dict(size=10, color='gold', symbol='diamond'),
+        marker=dict(size=12, color='gold', symbol='square'),
         name='Initial Portfolio',
         text=f"Initial<br>Return: {initial_metrics['annual_return']:.2%}<br>Vol: {initial_metrics['volatility']:.2%}<br>Sharpe: {initial_metrics['sharpe_ratio']:.2f}",
         hoverinfo='text'
@@ -236,7 +237,7 @@ def plot_efficient_frontier_3d(assets, initial_weights, optimized_weights=None):
             y=[optimized_metrics["annual_return"]],
             z=[optimized_metrics["sharpe_ratio"]],
             mode='markers',
-            marker=dict(size=10, color='lime', symbol='star'),
+            marker=dict(size=12, color='lime', symbol='diamond'),
             name='Optimized Portfolio',
             text=f"Optimized<br>Return: {optimized_metrics['annual_return']:.2%}<br>Vol: {optimized_metrics['volatility']:.2%}<br>Sharpe: {optimized_metrics['sharpe_ratio']:.2f}",
             hoverinfo='text'
