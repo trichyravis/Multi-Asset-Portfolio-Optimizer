@@ -9,6 +9,158 @@ from styles_enhanced import apply_main_styles, render_header, render_footer
 
 st.set_page_config(**PAGE_CONFIG)
 apply_main_styles()
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CUSTOM SIDEBAR STYLING
+# ═══════════════════════════════════════════════════════════════════════════════
+
+sidebar_css = """
+<style>
+    /* Sidebar background - dark blue gradient */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #003366 0%, #004d80 100%);
+    }
+    
+    [data-testid="stSidebar"] > div:first-child {
+        background: linear-gradient(180deg, #003366 0%, #004d80 100%);
+    }
+    
+    /* All text in sidebar - white */
+    [data-testid="stSidebar"] {
+        color: white !important;
+    }
+    
+    [data-testid="stSidebar"] * {
+        color: white !important;
+    }
+    
+    /* Navigation links - white text */
+    [data-testid="stSidebar"] a {
+        color: #FFD700 !important;
+    }
+    
+    /* Profile section */
+    .sidebar-profile {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid #FFD700;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        color: white;
+        text-align: center;
+    }
+    
+    .profile-name {
+        font-size: 16px;
+        font-weight: bold;
+        color: #FFD700;
+        margin-bottom: 10px;
+    }
+    
+    .profile-text {
+        font-size: 12px;
+        color: white;
+        margin: 5px 0;
+        line-height: 1.4;
+    }
+    
+    .linkedin-button {
+        display: inline-block;
+        background: #0A66C2;
+        color: white !important;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-align: center;
+        margin-top: 12px;
+        font-weight: bold;
+        text-decoration: none !important;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        box-sizing: border-box;
+        transition: background 0.3s;
+    }
+    
+    .linkedin-button:hover {
+        background: #004182 !important;
+        text-decoration: none !important;
+    }
+    
+    .sidebar-divider {
+        border-top: 1px solid #FFD700;
+        margin: 15px 0;
+        opacity: 0.5;
+    }
+    
+    .sidebar-footer {
+        border-top: 1px solid #FFD700;
+        padding-top: 15px;
+        margin-top: 30px;
+        text-align: center;
+        font-size: 11px;
+        color: #FFD700;
+    }
+    
+    /* Sidebar expanders */
+    [data-testid="stSidebar"] .streamlit-expanderHeader {
+        background: rgba(255, 215, 0, 0.1);
+        color: white;
+    }
+    
+    /* Sidebar buttons */
+    [data-testid="stSidebar"] .stButton > button {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid #FFD700;
+        width: 100%;
+        margin: 5px 0;
+    }
+    
+    [data-testid="stSidebar"] .stButton > button:hover {
+        background: #FFD700;
+        color: #003366;
+    }
+</style>
+"""
+
+st.markdown(sidebar_css, unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CUSTOM SIDEBAR CONTENT
+# ═══════════════════════════════════════════════════════════════════════════════
+
+with st.sidebar:
+    st.markdown("""
+    <div class="sidebar-profile">
+        <div class="profile-name">👤 Prof. V. Ravichandran</div>
+        <div class="profile-text">28+ Years Corporate Finance & Banking Experience</div>
+        <div class="profile-text">10+ Years Academic Excellence</div>
+        <a href="https://www.linkedin.com/in/trichyravis" target="_blank" class="linkedin-button">
+            🔗 LinkedIn Profile
+        </a>
+    </div>
+    
+    <div class="sidebar-divider"></div>
+    
+    <div style="text-align: center; margin: 20px 0; color: #FFD700; font-weight: bold;">
+        📊 Portfolio Optimizer
+    </div>
+    <div style="text-align: center; font-size: 12px; color: white; margin-bottom: 20px;">
+        Advanced optimization using Modern Portfolio Theory (MPT)
+    </div>
+    
+    <div class="sidebar-divider"></div>
+    
+    <div class="sidebar-footer">
+        🏔️ The Mountain Path<br>
+        World of Finance
+    </div>
+    """, unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE HEADER
+# ═══════════════════════════════════════════════════════════════════════════════
+
 render_header()
 
 # ═══════════════════════════════════════════════════════════════════════════════
