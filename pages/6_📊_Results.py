@@ -118,23 +118,32 @@ else:
             </div>
             """, unsafe_allow_html=True)
         
-        st.markdown("""
-            <div style='background-color: #004d80; padding: 1rem; border-radius: 0.5rem;'>
-            """, unsafe_allow_html=True)
+        # Build weight details HTML
+        weight_details_html = """
+            <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem;'>
+        """
         
         for asset in selected_assets:
             initial = initial_weights.get(asset, 0)
             optimized = optimized_weights.get(asset, 0)
             change = optimized - initial
             
-            st.markdown(f"""
-                <div style='color: white; padding: 0.5rem; border-bottom: 1px solid #003366;'>
-                    <strong>{ASSET_STATS[asset].get('emoji', '📊')} {asset}</strong><br>
-                    Before: {initial:.2f}% | After: {optimized:.2f}% | Change: {change:+.2f}%
+            weight_details_html += f"""
+                <div style='background-color: #004d80; color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border-left: 4px solid #FFD700;'>
+                    <div style='display: flex; justify-content: space-between; align-items: center;'>
+                        <strong style='color: white; font-size: 1.05rem;'>{ASSET_STATS[asset].get('emoji', '📊')} {asset}</strong>
+                        <div style='text-align: right; color: white; font-size: 0.95rem;'>
+                            <span>Before: <span style='color: #FFD700; font-weight: bold;'>{initial:.2f}%</span></span> | 
+                            <span>After: <span style='color: #90EE90; font-weight: bold;'>{optimized:.2f}%</span></span> | 
+                            <span>Change: <span style='color: #FFB6C1; font-weight: bold;'>{change:+.2f}%</span></span>
+                        </div>
+                    </div>
                 </div>
-                """, unsafe_allow_html=True)
+            """
         
-        st.markdown("</div>", unsafe_allow_html=True)
+        weight_details_html += "</div>"
+        
+        st.markdown(weight_details_html, unsafe_allow_html=True)
         
         st.markdown("")
         
