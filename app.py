@@ -340,7 +340,13 @@ with nav_col2:
         """, unsafe_allow_html=True)
 
 with nav_col3:
-    if st.button("Next: Weights →", key="app_to_weights", use_container_width=True):
+    st.markdown("")
+
+# Always visible next button
+st.markdown("")
+btn_col1, btn_col2 = st.columns([2, 1])
+with btn_col2:
+    if st.button("▶️ Next: Weights →", key="app_to_weights", use_container_width=True, help="Go to Weights page"):
         st.switch_page("pages/2_Weights.py")
 
 render_footer()
