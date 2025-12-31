@@ -311,11 +311,36 @@ with col2:
 st.markdown("")
 
 st.info("""
-💡 **Next Step:** Go to sidebar → ⚖️ **Weights** to adjust your weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
+💡 **Next Step:** Go to **⚖️ Weights** to adjust your weights. Your assets are set to equal distribution (100% total) by default, and you can customize them.
 """)
 
 st.success(f"""
 ✅ **Setup Complete!** Your assumptions and asset selections are ready. All calculations will use your risk-free rate ({st.session_state.risk_free_rate:.2f}%) and investment period ({st.session_state.investment_period} years).
 """)
+
+# Navigation button
+st.markdown("")
+st.markdown("""
+    <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+        <h2 style='color: #FFD700; margin-top: 0;'>🚀 START OPTIMIZATION WORKFLOW</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 1])
+
+with nav_col1:
+    st.markdown("")
+
+with nav_col2:
+    st.markdown("""
+        <div style='text-align: center; padding: 0.75rem; background-color: #004d80; border-radius: 0.5rem;'>
+            <p style='color: #FFD700; font-weight: bold; margin: 0;'>Step 1/6</p>
+            <p style='color: #90EE90; font-size: 0.9rem; margin: 0.25rem 0 0 0;'>Setup</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+with nav_col3:
+    if st.button("Next: Weights →", key="app_to_weights", use_container_width=True):
+        st.switch_page("pages/2_Weights.py")
 
 render_footer()
