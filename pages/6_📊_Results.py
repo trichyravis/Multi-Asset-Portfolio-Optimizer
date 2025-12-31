@@ -157,7 +157,7 @@ else:
         with col1:
             if st.button("🔄 Restart", width='stretch'):
                 st.session_state.clear()
-                st.switch_page("pages/1_🏠_Home.py")
+                st.switch_page("app.py")
         
         with col2:
             if st.button("⚖️ Adjust Weights", width='stretch'):
