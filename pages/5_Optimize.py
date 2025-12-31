@@ -108,7 +108,7 @@ st.markdown("""
 run_button_col1, run_button_col2, run_button_col3 = st.columns([1, 2, 1])
 
 with run_button_col2:
-    if st.button("▶️ RUN OPTIMIZATION NOW", key="run_opt_button", use_container_width=True):
+    if st.button("▶️ RUN OPTIMIZATION NOW", key="run_opt_button", use_container_width=True, help="Click to run portfolio optimization with your selected objective"):
         st.session_state.run_optimization = True
 
 # Only run if button was clicked
@@ -320,10 +320,16 @@ if st.session_state.get("run_optimization", False):
         </div>
         """, unsafe_allow_html=True)
 
+    st.markdown("""
+        <div style='background-color: #003366; padding: 1.5rem; border-radius: 0.5rem; margin: 2rem 0 1rem 0;'>
+            <h2 style='color: #FFD700; margin-top: 0;'>🔄 NAVIGATION</h2>
+        </div>
+        """, unsafe_allow_html=True)
+
     col1, col2, col3 = st.columns([1, 1, 1])
 
     with col1:
-        if st.button("← Back to Objective", key="optimize_to_objective", use_container_width=True):
+        if st.button("← Back to Objective", key="optimize_to_objective", use_container_width=True, help="Go back to Objective"):
             st.switch_page("pages/4_Objective.py")
 
     with col2:
@@ -335,7 +341,7 @@ if st.session_state.get("run_optimization", False):
             """, unsafe_allow_html=True)
 
     with col3:
-        if st.button("Next: Results →", key="optimize_to_results", use_container_width=True):
+        if st.button("Next: Results →", key="optimize_to_results", use_container_width=True, help="Go to Results"):
             st.switch_page("pages/6_Results.py")
 
 else:
