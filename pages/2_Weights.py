@@ -165,6 +165,15 @@ for idx, asset in enumerate(selected_assets_list):
         # Get current weight from session state
         current_weight = st.session_state.asset_weights_adjusted.get(asset, st.session_state.selected_assets.get(asset, 1.0/num_assets))
         
+        # Ensure current_weight is a valid float (fallback to equal weight if invalid)
+        try:
+            current_weight = float(current_weight) if current_weight is not None else 1.0/num_assets
+        except (ValueError, TypeError):
+            current_weight = 1.0/num_assets
+        
+        # Ensure the value is within valid range (0.0 to 1.0 for decimal weights)
+        current_weight = max(0.0, min(1.0, current_weight))
+        
         # Create 3-column layout for better visibility
         input_col, display_col = st.columns([3, 1])
         
