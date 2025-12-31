@@ -192,8 +192,10 @@ else:
     nav_col1, nav_col2, nav_col3 = st.columns([1, 1, 1])
     
     with nav_col1:
-        if st.button("← Back to Setup", key="weights_to_app", use_container_width=True):
+        st.markdown("""<div style='text-align: left;'>""", unsafe_allow_html=True)
+        if st.button("← Back to Setup", key="weights_to_app", use_container_width=True, help="Go back to Setup page"):
             st.switch_page("app.py")
+        st.markdown("""</div>""", unsafe_allow_html=True)
     
     with nav_col2:
         st.markdown("""
@@ -204,8 +206,10 @@ else:
             """, unsafe_allow_html=True)
     
     with nav_col3:
-        if st.button("Next: Analysis →", key="weights_to_analysis", use_container_width=True):
+        st.markdown("""<div style='text-align: right;'>""", unsafe_allow_html=True)
+        if st.button("Next: Analysis →", key="weights_to_analysis", use_container_width=True, help="Go to Analysis page"):
             st.switch_page("pages/3_Analysis.py")
+        st.markdown("""</div>""", unsafe_allow_html=True)
     
     # Next steps
     st.markdown("""
